@@ -1,38 +1,96 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #fff;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#back {
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.blur {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  text-align: left;
+  height: 100vh;
+  width: 100%;
+  backdrop-filter: blur(40px);
 }
 
-.App-link {
-  color: #61dafb;
+.login {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 4rem;
+  background: #483d8b;
+  /* background:#333; */
+  width: 70rem;
+  border-radius: 2%;
+  /* opacity:0.9; */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.login-data {
+  margin: 4rem;
+}
+
+/* .login form {
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  margin:12rem;
+} */
+
+table {
+  border-spacing: 0.8rem;
+}
+
+.signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup table {
+  background: #333;
+  background: rgb(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+#File {
+  display: none;
+}
+
+.container{
+  position:relative;
+  width:130px;
+}
+.circle {
+  position:relative;
+  border-radius: 100% !important;
+  overflow: hidden;
+  width: 130px;
+  height: 130px;
+  /* border: 2px solid rgba(255, 255, 255, 0.2); */
+  /* position: absolute; */
+  /* top: 72px; */
+}
+
+.profile-pic {
+  width: 130px;
+  max-height: 130px;
+  /* display: inline-block; */
+  object-fit:cover;
+}
+
+.p-image {
+  /* padding: 0.3rem; */
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  top:85%;
+  right:12%;
 }
