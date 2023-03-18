@@ -68,13 +68,14 @@ table {
   position:relative;
   width:130px;
 }
+
 .circle {
   position:relative;
   border-radius: 100% !important;
   overflow: hidden;
   width: 130px;
   height: 130px;
-  /* border: 2px solid rgba(255, 255, 255, 0.2); */
+  border: 2px solid rgba(255, 255, 255, 0.2);
   /* position: absolute; */
   /* top: 72px; */
 }
@@ -91,6 +92,6 @@ table {
   cursor: pointer;
   position: absolute;
   z-index: 1;
-  top:85%;
+  top:80%;
   right:12%;
 }
