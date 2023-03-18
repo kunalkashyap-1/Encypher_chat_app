@@ -1,5 +1,5 @@
-import Login from "./components/login.jsx";
-import Signup from "./components/signup.jsx";
+import Login from "../components/login.jsx";
+import Signup from "../components/signup.jsx";
 import {
     BrowserRouter as Router,
     Routes,
