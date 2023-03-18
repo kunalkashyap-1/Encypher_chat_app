@@ -3,8 +3,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
+const cors = require("cors");
+app.use(cors());
+app.use(express.urlencoded({
+    extended: true
+  }))
+
 const connectDB = require("./configs/DB");
-connectDB();
+// connectDB();
 
 const userRoutes = require("./Routes/userRoutes");
 const {notFound,errorHandler} = require("./middleware/errorMiddleware");
