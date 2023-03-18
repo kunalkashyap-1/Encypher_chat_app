@@ -10,7 +10,7 @@ app.use(express.urlencoded({
   }))
 
 const connectDB = require("./configs/DB");
-// connectDB();
+connectDB();
 
 const userRoutes = require("./Routes/userRoutes");
 const {notFound,errorHandler} = require("./middleware/errorMiddleware");

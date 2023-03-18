@@ -2,13 +2,11 @@ import { useRef, useState, useEffect } from "react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import axios from "axios";
 
-function ImgUpload() {
+function ImgUpload(props) {
   const fileInputRef = useRef(null);
   const [pic, setPic] = useState(null);
   const [trg, setTrg] = useState(0);
-  const [image, setImage] = useState(
-    "https://i0.wp.com/www.artstation.com/assets/default_avatar.jpg?ssl=1"
-  );
+  const [image, setImage] = useState();
 
   useEffect(() => {
     if(trg ===1){
@@ -25,12 +23,17 @@ function ImgUpload() {
         headers: {
           'Content-Type': 'multipart/form-data',
         }})
-      .then((data) => console.log(data))
+      .then((data) => {
+        setImage(data.data);
+        console.log(data.data);
+        props.onUpload(data.data);
+    })
       .catch((error) => {
         console.log(error);
       });
       setTrg(0);
     }
+    // eslint-disable-next-line
   }, [trg]);
 
   const picUpload = (img) => {
@@ -49,7 +52,7 @@ function ImgUpload() {
       <lable htmlFor="File">Upload Profile image</lable>
       <div className="container">
         <div className="circle">
-          <img className="profile-pic" alt="profile pic" src={image} />
+          <img className="profile-pic" alt="profile pic" src={image?image:"https://i0.wp.com/www.artstation.com/assets/default_avatar.jpg?ssl=1"} />
         </div>
         <div className="p-image">
             {/* <form encType="multipart/form-data"> */}

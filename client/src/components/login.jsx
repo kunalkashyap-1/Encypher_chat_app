@@ -1,8 +1,47 @@
 import { TextField, Button } from "@mui/material";
 import background from ".//aurora.jpg";
+import { useState } from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
-function Login() {
+
+function Login(props) {
+  const [email,setEmail] = useState();
+  const [passwd,setPasswd] = useState();
+
+  const onSubmit = async ()=>{
+    if(!email || !passwd){
+      const open = {
+        vis:true,
+        message:"Please fill all the feilds"
+      }
+      props.isOpen(open);
+      return;
+    }
+    // console.log(email, passwd);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post("http://localhost:8383/api/user/login",
+        { email, passwd },
+        config
+      );
+
+      // console.log(JSON.stringify(data));
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      // history.push("/chats");
+    } catch (error) {
+      //snackbar later
+        console.log(error.response.data.message)
+    }
+  }
+
+
+
   return (
     <div id="back" style={{ backgroundImage: `url(${background})` }}>
       <div className="blur">
@@ -24,11 +63,12 @@ function Login() {
                 <td>
                   <TextField
                     id="outlined-basic"
-                    label="Name"
+                    label="Email"
                     variant="outlined"
                     InputLabelProps={{style: { color: '#fff' }}}
                     InputProps={{style: { color: '#fff' }}}
                     size="large"
+                    onChange={(e)=>{setEmail(e.target.value)}}
                   />
                 </td>
               </tr>
@@ -42,6 +82,7 @@ function Login() {
                     InputLabelProps={{style: { color: '#fff' }}}
                     InputProps={{style: { color: '#fff' }}}
                     size="large"
+                    onChange={(e)=>{setPasswd(e.target.value)}}
                   />
                 </td>
               </tr>
@@ -51,6 +92,7 @@ function Login() {
                     variant="contained"
                     color="success"
                     sx={{ size: "medium" }}
+                    onClick={onSubmit}
                   >
                     Login
                   </Button>
