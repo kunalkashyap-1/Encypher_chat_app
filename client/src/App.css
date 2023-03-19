@@ -23,14 +23,19 @@
 
 .login {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   margin: 4rem;
-  background: #483d8b;
-  /* background:#333; */
-  width: 70rem;
+  /* background: rgb(0, 0, 0, 0.5); */
+  background:#333;
+  width: 70vw;
   border-radius: 2%;
   /* opacity:0.9; */
+}
+
+.login table{
+  width:32rem;
+  height:27rem;
 }
 
 .login-data {
@@ -58,6 +63,9 @@ table {
   background: #333;
   background: rgb(0, 0, 0, 0.3);
   border-radius: 10px;
+  width:95vw;
+  height:90vh;
+  padding-left:1rem;
 }
 
 #File {
@@ -66,7 +74,8 @@ table {
 
 .container{
   position:relative;
-  width:130px;
+  width:13rem;
+  margin:1rem;
 }
 
 .circle {
@@ -76,6 +85,7 @@ table {
   width: 130px;
   height: 130px;
   border: 2px solid rgba(255, 255, 255, 0.2);
+  margin:1rem;
   /* position: absolute; */
   /* top: 72px; */
 }
@@ -93,5 +103,5 @@ table {
   position: absolute;
   z-index: 1;
   top:80%;
-  right:12%;
+  right:32%;
 }

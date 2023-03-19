@@ -6,55 +6,74 @@ import { useState } from "react";
 import axios from "axios";
 
 function Signup(props) {
-  const [fname, setFname] = useState();
-  const [lname, setLname] = useState();
-  const [email, setEmail] = useState();
-  const [imgLink, setImgLink] = useState();
-  const [cnfmPasswd, setCnfmpasswd] = useState();
-  const [passwd, setPasswd] = useState();
-
+  const [fname, setFname] = useState(null);
+  const [lname, setLname] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [cnfmPasswd, setCnfmpasswd] = useState(null);
+  const [passwd, setPasswd] = useState(null);
+  const [imgData, setImgData] = useState(null);
 
   const onSubmit = async () => {
     if (!fname || !lname || !email || !passwd || !cnfmPasswd) {
       const open = {
-        vis:true,
-      message:"Please fill all the feilds"}
+        vis: true,
+        message: "Please fill all the feilds",
+      };
       props.isOpen(open);
       return;
     }
     if (passwd !== cnfmPasswd) {
       const open = {
-        vis:true,
-      message:"Passwords does not match"}
+        vis: true,
+        message: "Passwords does not match",
+      };
       props.isOpen(open);
       return;
     }
     // console.log(fname,lname,email,passwd,imgLink);
-    try {
-      const config = {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+
+    axios
+      .post(`http://localhost:8383/api/user/img`, imgData, {
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
-      };
-      const { data } = await axios.post("http://localhost:8383/api/user",
-        {
-          name:`${fname} ${lname}`,
-          email,
-          passwd,
-          image:imgLink,
-        },
-        config
-      );
-      // console.log(data);
-      
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      // history.push("/chats");
-    } catch (error) {
-      //snackbar later
-        console.log(error.response.data.message);
-      };
+      })
+      .then((imgLink) => {
+        axios
+          .post(
+            "http://localhost:8383/api/user",
+            {
+              name: `${fname} ${lname}`,
+              email,
+              passwd,
+              image: imgLink.data,
+            },
+            config
+          )
+          .then((data) => {
+            localStorage.setItem("userInfo", JSON.stringify(data));
+          })
+          .catch((err) => {
+            //snackbar later
+            console.log(err.response.data.message);
+            // history.push("/chats");
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
+  const style = {
+    color: "#fff",
+    background: "rgb(211,211,211,0.5)",
+    "border-radius": 20,
+  };
 
   return (
     <div id="back" style={{ backgroundImage: `url(${background})` }}>
@@ -75,36 +94,39 @@ function Signup(props) {
                 </td>
               </tr>
               <tr>
-                <ImgUpload onUpload={(link)=>{
-                  console.log(link);
-                  setImgLink(link)
-                  }}/>
+                <ImgUpload
+                  data={(imgData) => {
+                    // console.log(imgData.get("file"));
+                    setImgData(imgData);
+                  }}
+                />
               </tr>
               <tr>
                 <td>
                   <TextField
                     id="outlined-basic"
                     label="First name"
-                    variant="outlined"
+                    variant="filled"
                     InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: { color: "#fff" } }}
+                    InputProps={{ style: style, disableUnderline: true }}
                     size="large"
                     onChange={(e) => {
                       setFname(e.target.value);
                     }}
+                    sx={{ mr: 4, width: 300 }}
                   />
-                </td>
-                <td>
+
                   <TextField
                     id="outlined-basic"
                     label="Last name"
                     variant="outlined"
                     InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: { color: "#fff" } }}
+                    InputProps={{ style: style, disableUnderline: true }}
                     size="large"
                     onChange={(e) => {
                       setLname(e.target.value);
                     }}
+                    sx={{ mr: 5, width: 300 }}
                   />
                 </td>
               </tr>
@@ -115,11 +137,12 @@ function Signup(props) {
                     label="Email"
                     variant="outlined"
                     InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: { color: "#fff" } }}
+                    InputProps={{ style: style, disableUnderline: true }}
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}
                     size="large"
+                    sx={{ width: 300 }}
                   />
                 </td>
               </tr>
@@ -131,10 +154,11 @@ function Signup(props) {
                     variant="outlined"
                     type="password"
                     InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: { color: "#fff" } }}
+                    InputProps={{ style: style, disableUnderline: true }}
                     onChange={(e) => {
                       setPasswd(e.target.value);
                     }}
+                    sx={{ width: 300 }}
                     size="large"
                   />
                 </td>
@@ -147,10 +171,11 @@ function Signup(props) {
                     variant="outlined"
                     type="password"
                     InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: { color: "#fff" } }}
+                    InputProps={{ style: style, disableUnderline: true }}
                     onChange={(e) => {
                       setCnfmpasswd(e.target.value);
                     }}
+                    sx={{ width: 300 }}
                     size="large"
                   />
                 </td>
@@ -159,7 +184,7 @@ function Signup(props) {
                 <td>
                   <Button
                     variant="contained"
-                    color="success"
+                    color="error"
                     sx={{ size: "medium", m: "10px" }}
                   >
                     GOAuth
@@ -178,7 +203,6 @@ function Signup(props) {
           </table>
         </div>
       </div>
-      ;
     </div>
   );
 }

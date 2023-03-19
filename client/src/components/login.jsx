@@ -40,6 +40,11 @@ function Login(props) {
     }
   }
 
+  const style = {
+    color: "#fff",
+    background: "rgb(211,211,211,0.5)",
+    "border-radius": 20,
+  };
 
 
   return (
@@ -54,6 +59,7 @@ function Login(props) {
         <div className="login">
           <form>
             <table>
+              <tbody>
               <tr>
                 <td>
                   <h1>Login</h1>
@@ -64,11 +70,12 @@ function Login(props) {
                   <TextField
                     id="outlined-basic"
                     label="Email"
-                    variant="outlined"
+                    variant="filled"
                     InputLabelProps={{style: { color: '#fff' }}}
-                    InputProps={{style: { color: '#fff' }}}
+                    InputProps={{ style: style, disableUnderline: true }}
                     size="large"
                     onChange={(e)=>{setEmail(e.target.value)}}
+                    sx={{ mr: 4, width: 300 }}
                   />
                 </td>
               </tr>
@@ -77,12 +84,13 @@ function Login(props) {
                   <TextField
                     id="outlined-password-input"
                     label="Password"
-                    variant="outlined"
+                    variant="filled"
                     type="password"
                     InputLabelProps={{style: { color: '#fff' }}}
-                    InputProps={{style: { color: '#fff' }}}
+                    InputProps={{ style: style, disableUnderline: true }}
                     size="large"
                     onChange={(e)=>{setPasswd(e.target.value)}}
+                    sx={{ mr: 4, width: 300 }}
                   />
                 </td>
               </tr>
@@ -104,6 +112,7 @@ function Login(props) {
                   <Link to="/signup">Sign up</Link>
                 </td>
               </tr>
+              </tbody>
             </table>
           </form>
         </div>
