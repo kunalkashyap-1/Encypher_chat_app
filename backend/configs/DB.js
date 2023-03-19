@@ -5,6 +5,7 @@ const connectDB = async() =>{
         const conn = await mongoose.connect(process.env.mongo_URI,{
             useNewUrlParser:true,
             useUnifiedTopology:true,
+            dbName: "Encypher",
         });
 
         console.log(`mongodb connected: ${conn.connection.host}`);
