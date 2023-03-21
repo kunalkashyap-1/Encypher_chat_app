@@ -89,7 +89,7 @@ function Signup(props) {
               <tr>
                 <td>
                   <p>
-                    Already a member?<Link to="/">Log in</Link>
+                    Already a member?<Link className="anchor" to="/"> Log in</Link>
                   </p>
                 </td>
               </tr>
@@ -119,7 +119,7 @@ function Signup(props) {
                   <TextField
                     id="outlined-basic"
                     label="Last name"
-                    variant="outlined"
+                    variant="filled"
                     InputLabelProps={{ style: { color: "#fff" } }}
                     InputProps={{ style: style, disableUnderline: true }}
                     size="large"
@@ -135,7 +135,7 @@ function Signup(props) {
                   <TextField
                     id="outlined-basic"
                     label="Email"
-                    variant="outlined"
+                    variant="filled"
                     InputLabelProps={{ style: { color: "#fff" } }}
                     InputProps={{ style: style, disableUnderline: true }}
                     onChange={(e) => {
@@ -151,7 +151,7 @@ function Signup(props) {
                   <TextField
                     id="outlined-password-input"
                     label="Password"
-                    variant="outlined"
+                    variant="filled"
                     type="password"
                     InputLabelProps={{ style: { color: "#fff" } }}
                     InputProps={{ style: style, disableUnderline: true }}
@@ -168,7 +168,7 @@ function Signup(props) {
                   <TextField
                     id="outlined-password-input"
                     label="Confirm Password"
-                    variant="outlined"
+                    variant="filled"
                     type="password"
                     InputLabelProps={{ style: { color: "#fff" } }}
                     InputProps={{ style: style, disableUnderline: true }}

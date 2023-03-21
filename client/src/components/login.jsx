@@ -108,8 +108,8 @@ function Login(props) {
               </tr>
               <tr>
                 <td>
-                  <p>Don't have an account?</p>
-                  <Link to="/signup">Sign up</Link>
+                  <p>Don't have an account?
+                  <Link className="anchor" to="/signup"> Sign up</Link></p>
                 </td>
               </tr>
               </tbody>
