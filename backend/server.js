@@ -13,10 +13,12 @@ const connectDB = require("./configs/DB");
 connectDB();
 
 const userRoutes = require("./Routes/userRoutes");
+const chatRoutes = require("./Routes/chatRoutes");
 const {notFound,errorHandler} = require("./middleware/errorMiddleware");
 
 app.use(express.json());//to accept JSON data
 app.use("/api/user",userRoutes);
+app.use("/api/chat",chatRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
