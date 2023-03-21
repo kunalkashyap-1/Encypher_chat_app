@@ -16,10 +16,11 @@ const storage = multer.diskStorage({
   
 const upload = multer({ storage });
 
-const {registerUser,authUser} = require("../controllers/userControllers");
-const imgUpload = require("../controllers/imgUpload");
+const {protect} = require("../middleware/authMiddleware");
+const {registerUser,authUser,allUsers} = require("../controllers/userControllers");
+const imgUpload = require("../controllers/imgUploadController");
 
-router.route("/").post(registerUser);
+router.route("/").get(protect,allUsers).post(registerUser);
 router.route("/login").post(authUser);
 router.route("/img").post( upload.single('file'),imgUpload);
 
