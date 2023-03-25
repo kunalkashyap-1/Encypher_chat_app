@@ -1,8 +1,8 @@
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #fff;
 }
 
 #back {
@@ -10,6 +10,7 @@
   background-position: center;
   height: 100vh;
   width: 100%;
+  color: #fff;
 }
 
 .blur {
@@ -108,4 +109,15 @@ table {
 
 .anchor{
   text-decoration:none;
+}
+
+
+#chats{
+  display:flex;
+  justify-content:space-between;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
 }

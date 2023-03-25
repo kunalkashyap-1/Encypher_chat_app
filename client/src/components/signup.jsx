@@ -5,6 +5,7 @@ import ImgUpload from "./imgUpload";
 import { useState } from "react";
 import axios from "axios";
 
+
 function Signup(props) {
   const [fname, setFname] = useState(null);
   const [lname, setLname] = useState(null);

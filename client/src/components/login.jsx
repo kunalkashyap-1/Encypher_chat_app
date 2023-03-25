@@ -3,9 +3,24 @@ import background from ".//aurora.jpg";
 import { useState } from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {useEffect} from "react";
+
+
 
 
 function Login(props) {
+  const navigate  = useNavigate();
+
+  useEffect(()=>{
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if(user){
+      navigate("/chats");
+    }
+  },[navigate]);
+
+
   const [email,setEmail] = useState();
   const [passwd,setPasswd] = useState();
 
