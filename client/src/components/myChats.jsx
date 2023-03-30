@@ -52,10 +52,13 @@ function MyChats(props){
                     setCurrChat(chat)
                 }}
                 key={chat._id}>
-                    <Typography>{!chat.isGroupChat?
-                    (getSender(loggedUser,chat.users)):
+                    <img 
+                    alt={getSender(loggedUser,chat.users).name} 
+                    src={getSender(loggedUser,chat.users).image}/>
+                    <p>{!chat.isGroupChat?
+                    (getSender(loggedUser,chat.users).name):
                     (chat.chatName)}
-                    </Typography>
+                    </p>
                 </div>))}
             </div>):(<></>)}
         </div>

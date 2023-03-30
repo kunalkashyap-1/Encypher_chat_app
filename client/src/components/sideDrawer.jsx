@@ -115,6 +115,7 @@ function SideDrawer(props) {
           <div id="drawer">
             <h1>Search Users</h1>
             <br/>
+            <div id="drawer_search">
           <TextField
             id="outlined-basic"
             label="Search"
@@ -136,6 +137,7 @@ function SideDrawer(props) {
           >
             Go
           </Button>
+          </div>
           <Box>
           {searchResult?.map((user)=>{
             return (<UserListItem 
