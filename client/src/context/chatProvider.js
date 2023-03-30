@@ -7,7 +7,7 @@ const ChatProvider=({children})=>{
     const [currChat, setCurrChat] = useState();
     const [user, setUser] = useState();
     const [notif, setNotif] = useState();
-    const [chats, setChats] = useState();
+    const [chats, setChats] = useState([]);
 
     const navigate = useNavigate();
 
@@ -15,9 +15,9 @@ const ChatProvider=({children})=>{
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         setUser(userInfo);
 
-        if(!userInfo){
-            navigate("/");
-        }
+        // if(!userInfo){
+        //     navigate("/signup");
+        // }
     },[navigate]);
 
     return (

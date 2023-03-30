@@ -48,7 +48,7 @@ function Login(props) {
 
       // console.log(JSON.stringify(data));
       localStorage.setItem("userInfo", JSON.stringify(data));
-      // history.push("/chats");
+      navigate("/chats");
     } catch (error) {
       //snackbar later
         console.log(error.response.data.message)

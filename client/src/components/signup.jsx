@@ -4,6 +4,8 @@ import { TextField, Button } from "@mui/material";
 import ImgUpload from "./imgUpload";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 
 function Signup(props) {
@@ -13,9 +15,10 @@ function Signup(props) {
   const [cnfmPasswd, setCnfmpasswd] = useState(null);
   const [passwd, setPasswd] = useState(null);
   const [imgData, setImgData] = useState(null);
+  const navigate = useNavigate();
 
   const onSubmit = async () => {
-    if (!fname || !lname || !email || !passwd || !cnfmPasswd) {
+    if (!fname || !email || !passwd || !cnfmPasswd) {
       const open = {
         vis: true,
         message: "Please fill all the feilds",
@@ -58,6 +61,7 @@ function Signup(props) {
           )
           .then((data) => {
             localStorage.setItem("userInfo", JSON.stringify(data));
+            navigate("/");
           })
           .catch((err) => {
             //snackbar later
