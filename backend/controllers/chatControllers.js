@@ -78,7 +78,7 @@ const fetchChats = asyncHandler(async (req, res) => {
 //@route           POST /api/chat/group
 //@access          Protected
 const createGroupChat = asyncHandler(async (req, res) => {
-  if (!req.body.users || req.body.name) {
+  if (!req.body.users || !req.body.name) {
     return res.status(400).send({ message: "please fill the feilds" });
   }
 
