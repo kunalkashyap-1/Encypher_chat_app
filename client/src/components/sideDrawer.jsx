@@ -12,7 +12,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { ChatState } from "../context/chatProvider";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Profile from "./profile";
+import Profile from "./Modals/profile";
 import UserListItem from "./userListItem";
 import axios from "axios";
 

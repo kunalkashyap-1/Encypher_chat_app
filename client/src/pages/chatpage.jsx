@@ -17,7 +17,7 @@ function ChatPage(props) {
 
   const { user } = ChatState();
   return (
-    <div>
+    <div id="chatPage">
       {user && (
         <SideDrawer
           isOpen={(e) => {
@@ -35,14 +35,20 @@ function ChatPage(props) {
           />
         )}
         {user && (
-          <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+          <ChatBox
+            fetchAgain={fetchAgain}
+            setFetchAgain={setFetchAgain}
+            isOpen={(e) => {
+              setOpen(e);
+            }}
+          />
         )}
       </div>
       <Snackbar open={open.vis} autoHideDuration={4000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
           variant="filled"
-          severity="error"
+          severity={open.severity ? open.severity : "error"}
           sx={{ width: "100%" }}
         >
           {open.message}
