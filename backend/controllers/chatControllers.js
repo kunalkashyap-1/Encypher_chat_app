@@ -116,7 +116,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
 const renameGroup = asyncHandler(async (req, res) => {
   const { chatId, chatName } = req.body;
 
-  const updatedChat = await Chat.FindByIdAndUpdate(
+  const updatedChat = await Chat.findByIdAndUpdate(
     chatId,
     {
       chatName: chatName,
@@ -180,7 +180,7 @@ const addToGroup = asyncHandler(async (req, res) => {
     }
   )
     .populate("users", "-password")
-    .popultate("groupAdmin", "-password");
+    .populate("groupAdmin", "-password");
 
   if (!added) {
     res.status(404);
