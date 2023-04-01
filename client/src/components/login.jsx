@@ -23,6 +23,7 @@ function Login(props) {
 
   const [email,setEmail] = useState();
   const [passwd,setPasswd] = useState();
+  const [loading,setLoading] = useState(false);
 
   const onSubmit = async ()=>{
     if(!email || !passwd){
@@ -35,6 +36,7 @@ function Login(props) {
     }
     // console.log(email, passwd);
     try {
+      setLoading(true);
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -48,10 +50,16 @@ function Login(props) {
 
       // console.log(JSON.stringify(data));
       localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
       navigate("/chats");
     } catch (error) {
-      //snackbar later
-        console.log(error.response.data.message)
+      const open = {
+        vis:true,
+        message:error.message
+      }
+      props.isOpen(open);
+        console.log(error.response.data.message);
+        setLoading(false);
     }
   }
 

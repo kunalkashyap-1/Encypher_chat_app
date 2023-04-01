@@ -1,7 +1,7 @@
 import SingleChat from "./singleChat";
 import { ChatState } from "../context/chatProvider";
 
-function ChatBox({ fetchAgain, setFetchAgain },props) {
+function ChatBox({ fetchAgain, setFetchAgain,isOpen }) {
   const { currChat } = ChatState();
 
   return (
@@ -10,8 +10,8 @@ function ChatBox({ fetchAgain, setFetchAgain },props) {
       <SingleChat
         fetchAgain={fetchAgain}
         setFetchAgain={setFetchAgain}
-        isOpen={(e) => {
-          props.isOpen(e);
+        snack={(e) => {
+          isOpen(e);
         }}
       />
     </div>

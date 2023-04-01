@@ -71,6 +71,15 @@ const GroupChatModal = (props) => {
       return;
     }
 
+    if (selectedUsers.length < 2) {
+      const open = {
+        vis: true,
+        message: "Number of members are less than three",
+      };
+      props.isOpen(open);
+      return;
+    }
+
     try {
       const config = {
         headers: {
@@ -92,7 +101,18 @@ const GroupChatModal = (props) => {
         severity: "success",
       };
       props.isOpen(open);
-    } catch (error) {}
+      setSelectedUsers([]);
+      setSearchResult([]);
+      setGroupChatName();
+      setSearch();
+      handleClose();
+    } catch (error) {
+      const open = {
+        vis: true,
+        message: "Failed to create Chat!",
+      };
+      props.isOpen(open);
+    }
   };
 
   const handleDelete = (delUser) => {
