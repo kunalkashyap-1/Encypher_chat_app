@@ -231,9 +231,11 @@ function SideDrawer(props) {
             "aria-labelledby": "basic-button2",
           }}
         >
+            <MenuItem >
           <Profile user={user}>
-            <MenuItem onClick={handleClose2}>My Profile</MenuItem>
+              <Button onClick={handleClose2}>My Profile</Button>
           </Profile>
+              </MenuItem>
           <MenuItem onClick={logOutHandler}>Log Out</MenuItem>
         </Menu>
       </div>
