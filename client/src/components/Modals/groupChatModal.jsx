@@ -134,7 +134,7 @@ const GroupChatModal = (props) => {
 
   return (
     <div>
-      <Button onClick={handleOpen}>{props.children}</Button>
+      <span onClick={handleOpen}>{props.children}</span>
       <Modal
         open={open}
         onClose={handleClose}

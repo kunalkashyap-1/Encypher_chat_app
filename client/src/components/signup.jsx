@@ -17,6 +17,14 @@ function Signup(props) {
   const [imgData, setImgData] = useState(null);
   const navigate = useNavigate();
 
+  const OAuthHandler = ()=>{
+    const open = {
+      vis: true,
+      message: "Feature coming soon!",
+    };
+    props.isOpen(open);
+  }
+
   const onSubmit = async () => {
     if (!fname || !email || !passwd || !cnfmPasswd) {
       const open = {
@@ -191,8 +199,9 @@ function Signup(props) {
                     variant="contained"
                     color="error"
                     sx={{ size: "medium", m: "10px" }}
+                    onClick={OAuthHandler}
                   >
-                    GOAuth
+                    GMail
                   </Button>
                   <Button
                     variant="contained"

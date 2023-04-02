@@ -1,4 +1,4 @@
-import { Modal, Button, Box, Typography } from '@mui/material';
+import { Modal, Box, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import {React, useState} from "react";
 
@@ -22,8 +22,8 @@ const Profile = ({user,children})=>{
   return(
         <>
         {children?
-        <Button onClick={handleOpen}>{children.props.children}</Button>:
-        <PersonIcon onClick={handleOpen}/>
+        <span style={{cursor:"pointer"}} onClick={handleOpen}>{children.props.children}</span>:
+        <PersonIcon style={{cursor:"pointer"}} onClick={handleOpen}/>
 }
       <Modal
         open={open}

@@ -1,5 +1,5 @@
 import { ChatState } from "../context/chatProvider";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Avatar,
@@ -12,21 +12,38 @@ import UpdateGroupModal from "./Modals/updateGroupModal";
 import ScrollableChat from "./scrollableChat";
 import { getSender, getGroupData } from "../config/chatLogics.js";
 import axios from "axios";
+import io from "socket.io-client";
+import { Player } from "@lottiefiles/react-lottie-player";
+import typingAnimation from "../animations/3759-typing.json";
 
 const styleText = {
   // color: "#fff",
   background: "rgb(211,211,211,0.5)",
 };
 
-const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
-  const { user, currChat, setCurrChat } = ChatState();
+const ENDPOINT = "http://localhost:8383";
+let socket, currChatCompare;
+
+const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
+  const {
+    user,
+    currChat,
+    setCurrChat,
+    typing,
+    setTyping,
+    isTyping,
+    setIsTyping,
+    notif,
+    setNotif,
+  } = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
+  const [socketConnected, setsocketConnected] = useState(false);
 
-  const fetchMessages = async()=>{
-    if(!currChat) return;
-    try{
+  const fetchMessages = async () => {
+    if (!currChat) return;
+    try {
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -35,25 +52,27 @@ const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
       };
 
       setLoading(true);
-      const {data} = await axios.get(`http://localhost:8383/api/message/${currChat._id}`,config);
+      const { data } = await axios.get(
+        `http://localhost:8383/api/message/${currChat._id}`,
+        config
+      );
       setMessages(data);
       setLoading(false);
-    }catch(error){
+
+      socket.emit("join chat", currChat._id);
+    } catch (error) {
       const open = {
         vis: true,
         message: "Failed to load the messages",
       };
       snack(open);
     }
-  }
+  };
 
-  useEffect(()=>{
-    fetchMessages();
-  },[currChat])
-
-  const sendMessage = async (e)=>{
-    if(newMessage){
-      try{
+  const sendMessage = async (e) => {
+    if (newMessage) {
+      socket.emit("stop typing", currChat._id);
+      try {
         const config = {
           headers: {
             "Content-type": "application/json",
@@ -61,30 +80,92 @@ const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
           },
         };
 
-        const {data} = await axios.post(`http://localhost:8383/api/message`,{
-          content:newMessage,
-          chatId:currChat._id,
-        },config);
+        const { data } = await axios.post(
+          `http://localhost:8383/api/message`,
+          {
+            content: newMessage,
+            chatId: currChat._id,
+          },
+          config
+        );
         setNewMessage("");
-        setMessages([...messages,data]);
-      }catch(error){
+
+        socket.emit("newMessage", data);
+        setMessages([...messages, data]);
+      } catch (error) {
         const open = {
           vis: true,
           message: "failed to send the message",
         };
         snack(open);
-      };
+      }
     }
   };
 
-  const typingHandler = (e)=>{
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => {
+      setsocketConnected(true);
+    });
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stopTyping", () => setIsTyping(false));
+
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+
+    currChatCompare = currChat;
+    // eslint-disable-next-line
+  }, [currChat]);
+
+
+  useEffect(() => {
+    socket.on("messageRecieved", (newMessage) => {
+      if (!currChatCompare || currChatCompare._id !== newMessage.chat._id) {
+        if(!notif.includes(newMessage)){
+          setNotif([newMessage,...notif]);
+          setFetchAgain(!fetchAgain);
+        }
+      } else {
+        setMessages([...messages, newMessage]);
+      }
+    });
+  });
+
+
+  const typingHandler = (e) => {
     setNewMessage(e.target.value);
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", currChat._id);
+    }
+
+    let lastTypeTime = new Date().getTime();
+    let timerLength = 3000;
+
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let timeDiff = timeNow - lastTypeTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stopTyping", currChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   return (
     <>
       {currChat ? (
-        <>
+        <div style={{
+          display:"flex",
+          flexDirection:"column",
+          width:"100%",
+        }}>
           {!currChat.isGroupChat ? (
             <div id="chatBoxHeader">
               <div id="profileDetails">
@@ -92,11 +173,31 @@ const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
                   alt={getSender(user, currChat.users).name}
                   src={getSender(user, currChat.users).image}
                 />
-                <Typography>{getSender(user, currChat.users).name}</Typography>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <Profile user={getSender(user, currChat.users)}>
+                    <Typography>
+                      {getSender(user, currChat.users).name}
+                    </Typography>
+                  </Profile>
+                  <p
+                    style={
+                      isTyping
+                        ? {
+                            width: "35px",
+                            height: "20px",
+                          }
+                        : { width: "auto" }
+                    }
+                  >
+                    {isTyping ? (
+                      <Player autoplay loop src={typingAnimation} />
+                    ) : (
+                      "Click here for details"
+                    )}
+                  </p>
+                </div>
               </div>
-              <div>
-                <Profile user={getSender(user, currChat.users)}></Profile>
-              </div>
+              <div></div>
             </div>
           ) : (
             <div id="chatBoxHeader">
@@ -105,9 +206,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
                   alt={getGroupData(user, currChat).name}
                   src={getGroupData(user, currChat).image}
                 />
-                <Typography>{getGroupData(user, currChat).name}</Typography>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {/* <Profile user={getSender(user, currChat.users)}> */}
+                  <Typography>{getGroupData(user, currChat).name}</Typography>
+                  {/* </Profile> */}
+                  <p
+                    style={
+                      isTyping
+                        ? {
+                            width: "35px",
+                            height: "20px",
+                          }
+                        : { width: "auto" }
+                    }
+                  >
+                    {isTyping ? (
+                      <Player autoplay loop src={typingAnimation} />
+                    ) : (
+                      "Click here for details"
+                    )}
+                  </p>
+                </div>
               </div>
-              <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <UpdateGroupModal
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
@@ -128,16 +249,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
               />
             ) : (
               <div className="messages">
-                <ScrollableChat messages={messages}/>
+                <ScrollableChat messages={messages} />
               </div>
             )}
           </div>
-          <div id="inputSection" 
-          onKeyDown={(e)=>{
-            if (e.key === 'Enter') {
-              sendMessage();
-            }
-          }}>
+
+          <div
+            id="inputSection"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                sendMessage();
+              }
+            }}
+          >
             <TextField
               fullWidth
               placeholder="Type a message"
@@ -146,15 +270,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain,snack }) => {
               onChange={typingHandler}
               value={newMessage}
             />
-            <Button
-              variant="contained"
-              color="success"
-                onClick={sendMessage}
-            >
+            <Button variant="contained" color="success" onClick={sendMessage}>
               Send
             </Button>
           </div>
-        </>
+        </div>
       ) : (
         <div id="chatBoxInside">
           <h1>Click on a user to start chatting</h1>

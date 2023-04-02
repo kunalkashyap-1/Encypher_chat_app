@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getSender } from "../config/chatLogics.js";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import GroupChatModal from "./Modals/groupChatModal.jsx"
-import { Button} from "@mui/material";
+import GroupChatModal from "./Modals/groupChatModal.jsx";
+import { Button } from "@mui/material";
 
 function MyChats(props) {
-  const { chats, setChats, user, currChat, setCurrChat } = ChatState();
+  const { chats, setChats, user, currChat, setCurrChat, isTyping } =
+    ChatState();
   const [loggedUser, setLoggedUser] = useState();
 
   const fetchChat = async () => {
@@ -41,12 +42,19 @@ function MyChats(props) {
     [props.fetchAgain]
   );
 
+  //make use effect for dynamic change in latest message
+
   return (
     <div id="chat">
-      <div id="chatData">
-        {" "}
+      <div id="chatData" >
+        <p>
         My Chats
-        <GroupChatModal isOpen={(e)=>{props.isOpen(e)}}>
+        </p>
+        <GroupChatModal
+          isOpen={(e) => {
+            props.isOpen(e);
+          }}
+        >
           <Button variant="contained">
             New Group Chat
             <GroupAddIcon />
@@ -67,11 +75,24 @@ function MyChats(props) {
                 alt={getSender(loggedUser, chat.users).name}
                 src={getSender(loggedUser, chat.users).image}
               />
-              <p>
-                {!chat.isGroupChat
-                  ? getSender(loggedUser, chat.users).name
-                  : chat.chatName}
-              </p>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <p>
+                  {!chat.isGroupChat
+                    ? getSender(loggedUser, chat.users).name
+                    : chat.chatName}
+                </p>
+                <p>
+                  {chat.latestMessage ? (
+                    <span>
+                      {chat.latestMessage.sender.name}
+                      {": "}
+                      {chat.latestMessage.content}
+                    </span>
+                  ) : (
+                    <></>
+                  )}
+                </p>
+              </div>
             </div>
           ))}
         </div>

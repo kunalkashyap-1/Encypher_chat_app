@@ -5,7 +5,8 @@ import {
   MenuItem,
   Avatar,
   TextField,
-  Box
+  Box,
+  Badge,
 } from "@mui/material";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -14,11 +15,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Profile from "./Modals/profile";
 import UserListItem from "./userListItem";
+import { getSender } from "../config/chatLogics.js";
+
 import axios from "axios";
 
 function SideDrawer(props) {
   const navigate = useNavigate();
-  const {user, setCurrChat, chats, setChats } = ChatState();
+  const { user, setCurrChat, chats, setChats, notif, setNotif } = ChatState();
   const [isActive, setIsActive] = useState(false);
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -40,9 +43,6 @@ function SideDrawer(props) {
     localStorage.removeItem("userInfo");
     navigate("/");
   };
-  const handleClose1 = () => {
-    setAnchorEl1(null);
-  };
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
@@ -53,55 +53,62 @@ function SideDrawer(props) {
     setAnchorEl2(event.currentTarget);
   };
 
-  const handleSearch = async ()=>{
-    if(!search){
+  const handleSearch = async () => {
+    if (!search) {
       const open = {
-        vis:true,
-        message:"Please Enter something in search"
-      }
+        vis: true,
+        message: "Please Enter something in search",
+      };
       props.isOpen(open);
       return;
     }
 
-    try{
-      const config ={
-        headers:{
+    try {
+      const config = {
+        headers: {
           Authorization: `Bearer ${user.token}`,
-        }
+        },
       };
 
-      const {data} = await axios.get(`http://localhost:8383/api/user?search=${search}`,config);
+      const { data } = await axios.get(
+        `http://localhost:8383/api/user?search=${search}`,
+        config
+      );
       setSearchResult(data);
-    }catch(error){
+    } catch (error) {
       const open = {
-        vis:true,
-        message:"Failed to load the Search Results"
-      }
+        vis: true,
+        message: "Failed to load the Search Results",
+      };
       props.isOpen(open);
     }
-  }
+  };
 
-  const accessChat =async (userId)=>{ 
-    try{
-      const config ={
-        headers:{
-          "Content-type":"application/json",
+  const accessChat = async (userId) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
           Authorization: `Bearer ${user.token}`,
-        }
-    };
-    const {data} = await axios.post("http://localhost:8383/api/chat",{userId},config);
-    if(!chats.find((c)=>c._id === data._id)){
-      setChats([data,...chats]);
+        },
+      };
+      const { data } = await axios.post(
+        "http://localhost:8383/api/chat",
+        { userId },
+        config
+      );
+      if (!chats.find((c) => c._id === data._id)) {
+        setChats([data, ...chats]);
+      }
+      setCurrChat(data);
+      toggler();
+    } catch (error) {
+      const open = {
+        vis: true,
+        message: error.message,
+      };
+      props.isOpen(open);
     }
-    setCurrChat(data);
-    toggler();
-   }catch(error){
-    const open = {
-      vis:true,
-      message:error.message
-    }
-    props.isOpen(open);
-   }
   };
 
   return (
@@ -114,41 +121,43 @@ function SideDrawer(props) {
         <Drawer anchor="left" open={isActive} onClose={toggler}>
           <div id="drawer">
             <h1>Search Users</h1>
-            <br/>
+            <br />
             <div id="drawer_search">
-          <TextField
-            id="outlined-basic"
-            label="Search"
-            variant="filled"
-            // InputLabelProps={{ style: { color: "#fff" } }}
-            InputProps={{ style: style, disableUnderline: true }}
-            size="small"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            // sx={{ mt: 2}}
-          />
-          <Button
-            variant="contained"
-            color="success"
-            size="small"
-            onClick={handleSearch}
-          >
-            Go
-          </Button>
-          </div>
-          <Box>
-          {searchResult?.map((user)=>{
-            return (<UserListItem 
-            key = {user._id}
-            user={user}
-            handleFunction={()=>{
-              accessChat(user._id)
-            }}
-            />);
-          })}
-          </Box>
+              <TextField
+                id="outlined-basic"
+                label="Search"
+                variant="filled"
+                // InputLabelProps={{ style: { color: "#fff" } }}
+                InputProps={{ style: style, disableUnderline: true }}
+                size="small"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                // sx={{ mt: 2}}
+              />
+              <Button
+                variant="contained"
+                color="success"
+                size="small"
+                onClick={handleSearch}
+              >
+                Go
+              </Button>
+            </div>
+            <Box>
+              {searchResult?.map((user) => {
+                return (
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    handleFunction={() => {
+                      accessChat(user._id);
+                    }}
+                  />
+                );
+              })}
+            </Box>
           </div>
         </Drawer>
       </div>
@@ -161,20 +170,48 @@ function SideDrawer(props) {
           aria-expanded={open1 ? "true" : undefined}
           onClick={handleClick1}
         >
-          <NotificationsIcon />
+          <Badge badgeContent={notif.length} color="secondary">
+            <NotificationsIcon />
+          </Badge>
         </Button>
         <Menu
           id="basic-menu1"
           anchorEl={anchorEl1}
           open={open1}
-          onClose={handleClose1}
+          onClose={() => {
+            setAnchorEl1(null);
+          }}
           MenuListProps={{
             "aria-labelledby": "basic-button1",
           }}
         >
-          <MenuItem onClick={handleClose1}>Profile</MenuItem>
-          <MenuItem onClick={handleClose1}>My account</MenuItem>
-          <MenuItem onClick={handleClose1}>Logout</MenuItem>
+          {!notif.length ? (
+            <MenuItem
+              onClick={() => {
+                setAnchorEl1(null);
+              }}
+            >
+              No New Notifications
+            </MenuItem>
+          ) : (
+            ""
+          )}
+          {notif?.map((n) => {
+            return (
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl1(null);
+                  setCurrChat(n.chat);
+                  setNotif(notif.filter((el) => el !== n));
+                }}
+                key={n._id}
+              >
+                {n.chat.isGroupChat
+                  ? `New Message in ${n.chat.chatName}`
+                  : `New Message from ${getSender(user, n.chat.users).name}`}
+              </MenuItem>
+            );
+          })}
         </Menu>
         <Button
           id="basic-button2"

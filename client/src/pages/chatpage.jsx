@@ -5,7 +5,7 @@ import SideDrawer from "../components/sideDrawer.jsx";
 import MyChats from "../components/myChats.jsx";
 import ChatBox from "../components/chatBox.jsx";
 
-function ChatPage(props) {
+function ChatPage() {
   const [fetchAgain, setFetchAgain] = useState(false);
   const [open, setOpen] = useState({
     vis: false,
@@ -16,6 +16,7 @@ function ChatPage(props) {
   };
 
   const { user } = ChatState();
+
   return (
     <div id="chatPage">
       {user && (

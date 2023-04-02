@@ -6,8 +6,10 @@ const ChatContext = createContext();
 const ChatProvider=({children})=>{
     const [currChat, setCurrChat] = useState();
     const [user, setUser] = useState();
-    const [notif, setNotif] = useState();
+    const [notif, setNotif] = useState([]);
     const [chats, setChats] = useState([]);
+    const [typing, setTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
     const navigate = useNavigate();
 
@@ -31,6 +33,10 @@ const ChatProvider=({children})=>{
             setNotif,
             chats,
             setChats,
+            typing, 
+            setTyping,
+            isTyping, 
+            setIsTyping,
         }}
         >
             {children}

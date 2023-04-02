@@ -1,4 +1,7 @@
-import { TextField, Button } from "@mui/material";
+import { TextField,
+   Button,
+   CircularProgress,
+  } from "@mui/material";
 import background from ".//aurora.jpg";
 import { useState } from "react";
 import {Link} from "react-router-dom";
@@ -51,7 +54,9 @@ function Login(props) {
       // console.log(JSON.stringify(data));
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      navigate("/chats");
+      if(!loading){
+        navigate("/chats");
+      }
     } catch (error) {
       const open = {
         vis:true,
@@ -119,6 +124,10 @@ function Login(props) {
               </tr>
               <tr>
                 <td>
+                  <div style={{
+                    display:"flex",
+                    gap:"1rem",
+                    }}>
                   <Button
                     variant="contained"
                     color="success"
@@ -127,6 +136,8 @@ function Login(props) {
                   >
                     Login
                   </Button>
+                  {loading?<CircularProgress/>:<></>}
+                  </div>
                 </td>
               </tr>
               <tr>
