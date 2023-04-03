@@ -294,6 +294,7 @@ table {
     display: none;
   }
 }
+
 @media (max-width:930px){
   .login-data{
     padding:4rem 0;

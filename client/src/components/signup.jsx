@@ -6,8 +6,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
-
 function Signup(props) {
   const [fname, setFname] = useState(null);
   const [lname, setLname] = useState(null);
@@ -17,13 +15,17 @@ function Signup(props) {
   const [imgData, setImgData] = useState(null);
   const navigate = useNavigate();
 
-  const OAuthHandler = ()=>{
+  const defaultImg =
+    "https://i0.wp.com/www.artstation.com/assets/default_avatar.jpg?ssl=1";
+  let imgFile;
+
+  const OAuthHandler = () => {
     const open = {
       vis: true,
       message: "Feature coming soon!",
     };
     props.isOpen(open);
-  }
+  };
 
   const onSubmit = async () => {
     if (!fname || !email || !passwd || !cnfmPasswd) {
@@ -49,8 +51,18 @@ function Signup(props) {
       },
     };
 
+    if (!imgData) {
+      imgFile = new FormData();
+      imgFile.append("file", defaultImg);
+      imgFile.append("public_id", "DefaultImage");
+      imgFile.append("upload_preset", "Encypher");
+      imgFile.append("cloud_name", "discki5bm");
+    } else {
+      imgFile = imgData;
+    }
+
     axios
-      .post(`http://localhost:8383/api/user/img`, imgData, {
+      .post(`http://localhost:8383/api/user/img`, imgFile, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -72,9 +84,7 @@ function Signup(props) {
             navigate("/");
           })
           .catch((err) => {
-            //snackbar later
             console.log(err.response.data.message);
-            // history.push("/chats");
           });
       })
       .catch((error) => {
@@ -102,14 +112,18 @@ function Signup(props) {
               <tr>
                 <td>
                   <p>
-                    Already a member?<Link className="anchor" to="/"> Log in</Link>
+                    Already a member?
+                    <Link className="anchor" to="/">
+                      {" "}
+                      Log in
+                    </Link>
                   </p>
                 </td>
               </tr>
               <tr>
                 <ImgUpload
                   data={(imgData) => {
-                    // console.log(imgData.get("file"));
+                    console.log(imgData.get("file"));
                     setImgData(imgData);
                   }}
                 />
@@ -117,7 +131,6 @@ function Signup(props) {
               <tr>
                 <td>
                   <TextField
-                    id="outlined-basic"
                     label="First name"
                     variant="filled"
                     InputLabelProps={{ style: { color: "#fff" } }}
@@ -197,19 +210,19 @@ function Signup(props) {
                 <td>
                   <Button
                     variant="contained"
-                    color="error"
-                    sx={{ size: "medium", m: "10px" }}
-                    onClick={OAuthHandler}
-                  >
-                    GMail
-                  </Button>
-                  <Button
-                    variant="contained"
                     color="success"
                     sx={{ size: "medium" }}
                     onClick={onSubmit}
                   >
                     Sign Up
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ size: "medium", m: "10px" }}
+                    onClick={OAuthHandler}
+                  >
+                    GMail
                   </Button>
                 </td>
               </tr>

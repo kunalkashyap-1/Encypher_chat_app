@@ -15,6 +15,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { Player } from "@lottiefiles/react-lottie-player";
 import typingAnimation from "../animations/3759-typing.json";
+import SendIcon from '@mui/icons-material/Send';
 
 const styleText = {
   // color: "#fff",
@@ -34,8 +35,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     setIsTyping,
     notif,
     setNotif,
-    typeData, 
-    setTypeData
+    typeData,
+    setTypeData,
   } = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -228,7 +229,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
                   >
                     {isTyping && typeData.room === currChat._id ? (
                       <>
-                        <span>{typeData.typist }</span>
+                        <span>{typeData.typist}</span>
                         <Player
                           autoplay
                           loop
@@ -288,7 +289,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
               value={newMessage}
             />
             <Button variant="contained" color="success" onClick={sendMessage}>
-              Send
+              <SendIcon />
             </Button>
           </div>
         </div>

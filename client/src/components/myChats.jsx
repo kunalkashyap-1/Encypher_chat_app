@@ -4,6 +4,7 @@ import axios from "axios";
 import { getSender } from "../config/chatLogics.js";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import GroupChatModal from "./Modals/groupChatModal.jsx";
+import ChatLoading from "./chatLoading"
 import { Button } from "@mui/material";
 
 function MyChats(props) {
@@ -41,10 +42,6 @@ function MyChats(props) {
     // eslint-disable-next-line
     [props.fetchAgain]
   );
-
-  useEffect(()=>{
-    console.log("here");
-  },[typeData])
 
   return (
     <div id="chat">
@@ -107,7 +104,7 @@ function MyChats(props) {
           ))}
         </div>
       ) : (
-        <></>
+        <ChatLoading />
       )}
     </div>
   );
