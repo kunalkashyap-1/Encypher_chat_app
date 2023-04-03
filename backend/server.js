@@ -55,8 +55,10 @@ io.on("connection", (socket) => {
     // console.log("user joined room: " + room);
   });
 
-  socket.on("typing", (room) => {
-    socket.in(room).emit("typing");
+  socket.on("typing", (args) => {
+    socket
+      .in(args.room)
+      .emit("typing", args);
   });
 
   socket.on("stopTyping", (room) => {
@@ -73,7 +75,7 @@ io.on("connection", (socket) => {
       socket.in(user._id).emit("messageRecieved", newMessage);
     });
   });
-  
+
   socket.off("setup", () => {
     console.log("User Disconneccted");
     socket.leave(userData._id);

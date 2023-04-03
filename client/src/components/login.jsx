@@ -28,6 +28,14 @@ function Login(props) {
   const [passwd,setPasswd] = useState();
   const [loading,setLoading] = useState(false);
 
+  const OAuthHandler = ()=>{
+    const open = {
+      vis: true,
+      message: "Feature coming soon!",
+    };
+    props.isOpen(open);
+  }
+
   const onSubmit = async ()=>{
     if(!email || !passwd){
       const open = {
@@ -137,6 +145,14 @@ function Login(props) {
                     Login
                   </Button>
                   {loading?<CircularProgress/>:<></>}
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ size: "medium" }}
+                    onClick={OAuthHandler}
+                  >
+                    GMail
+                  </Button>
                   </div>
                 </td>
               </tr>

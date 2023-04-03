@@ -170,7 +170,7 @@ function SideDrawer(props) {
           aria-expanded={open1 ? "true" : undefined}
           onClick={handleClick1}
         >
-          <Badge badgeContent={notif.length} color="secondary">
+          <Badge badgeContent={notif.length} color="error">
             <NotificationsIcon />
           </Badge>
         </Button>

@@ -7,7 +7,7 @@ import GroupChatModal from "./Modals/groupChatModal.jsx";
 import { Button } from "@mui/material";
 
 function MyChats(props) {
-  const { chats, setChats, user, currChat, setCurrChat, isTyping } =
+  const { chats, setChats, user, setCurrChat, isTyping, typeData, currChat } =
     ChatState();
   const [loggedUser, setLoggedUser] = useState();
 
@@ -42,14 +42,14 @@ function MyChats(props) {
     [props.fetchAgain]
   );
 
-  //make use effect for dynamic change in latest message
+  useEffect(()=>{
+    console.log("here");
+  },[typeData])
 
   return (
     <div id="chat">
-      <div id="chatData" >
-        <p>
-        My Chats
-        </p>
+      <div id="chatData">
+        <p>My Chats</p>
         <GroupChatModal
           isOpen={(e) => {
             props.isOpen(e);
@@ -81,15 +81,25 @@ function MyChats(props) {
                     ? getSender(loggedUser, chat.users).name
                     : chat.chatName}
                 </p>
-                <p>
-                  {chat.latestMessage ? (
-                    <span>
-                      {chat.latestMessage.sender.name}
-                      {": "}
-                      {chat.latestMessage.content}
-                    </span>
+                <p >
+                  {isTyping && typeData.room !== currChat._id && typeData.room === chat._id? (
+                    chat.isGroupChat ? (
+                      <span style={{color:"green"}}>{typeData.typist + " is typing..."}</span>
+                    ) : (
+                      <span style={{color:"green"}}>Typing...</span>
+                    )
                   ) : (
-                    <></>
+                    <>
+                      {chat.latestMessage ? (
+                        <span>
+                          {chat.latestMessage.sender.name}
+                          {": "}
+                          {chat.latestMessage.content}
+                        </span>
+                      ) : (
+                        <></>
+                      )}
+                    </>
                   )}
                 </p>
               </div>

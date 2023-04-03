@@ -28,13 +28,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
   const {
     user,
     currChat,
-    setCurrChat,
     typing,
     setTyping,
     isTyping,
     setIsTyping,
     notif,
     setNotif,
+    typeData, 
+    setTypeData
   } = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -108,7 +109,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     socket.on("connected", () => {
       setsocketConnected(true);
     });
-    socket.on("typing", () => setIsTyping(true));
+    socket.on("typing", (TypeData) => {
+      setIsTyping(true);
+      setTypeData(TypeData);
+    });
     socket.on("stopTyping", () => setIsTyping(false));
 
     // eslint-disable-next-line
@@ -121,20 +125,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     // eslint-disable-next-line
   }, [currChat]);
 
-
   useEffect(() => {
     socket.on("messageRecieved", (newMessage) => {
       if (!currChatCompare || currChatCompare._id !== newMessage.chat._id) {
-        if(!notif.includes(newMessage)){
-          setNotif([newMessage,...notif]);
+        if (!notif.includes(newMessage)) {
+          setNotif([newMessage, ...notif]);
           setFetchAgain(!fetchAgain);
         }
       } else {
         setMessages([...messages, newMessage]);
+        setFetchAgain(!fetchAgain);
       }
     });
   });
-
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -142,7 +145,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
 
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", currChat._id);
+      socket.emit("typing", { room: currChat._id, typist: user.name });
     }
 
     let lastTypeTime = new Date().getTime();
@@ -161,11 +164,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
   return (
     <>
       {currChat ? (
-        <div style={{
-          display:"flex",
-          flexDirection:"column",
-          width:"100%",
-        }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
           {!currChat.isGroupChat ? (
             <div id="chatBoxHeader">
               <div id="profileDetails">
@@ -181,7 +186,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
                   </Profile>
                   <p
                     style={
-                      isTyping
+                      isTyping && typeData.room === currChat._id
                         ? {
                             width: "35px",
                             height: "20px",
@@ -189,8 +194,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
                         : { width: "auto" }
                     }
                   >
-                    {isTyping ? (
-                      <Player autoplay loop src={typingAnimation} />
+                    {isTyping && typeData.room === currChat._id ? (
+                      <>
+                        <Player autoplay loop src={typingAnimation} />
+                      </>
                     ) : (
                       "Click here for details"
                     )}
@@ -210,22 +217,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
                   {/* <Profile user={getSender(user, currChat.users)}> */}
                   <Typography>{getGroupData(user, currChat).name}</Typography>
                   {/* </Profile> */}
-                  <p
-                    style={
-                      isTyping
-                        ? {
+                  <div
+                    style={{
+                      display: "flex",
+                      color:
+                        isTyping && typeData.room === currChat._id
+                          ? "Green"
+                          : "",
+                    }}
+                  >
+                    {isTyping && typeData.room === currChat._id ? (
+                      <>
+                        <span>{typeData.typist }</span>
+                        <Player
+                          autoplay
+                          loop
+                          style={{
                             width: "35px",
                             height: "20px",
-                          }
-                        : { width: "auto" }
-                    }
-                  >
-                    {isTyping ? (
-                      <Player autoplay loop src={typingAnimation} />
+                          }}
+                          src={typingAnimation}
+                        />
+                      </>
                     ) : (
                       "Click here for details"
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>

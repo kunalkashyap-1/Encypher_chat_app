@@ -10,6 +10,8 @@ const ChatProvider=({children})=>{
     const [chats, setChats] = useState([]);
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
+    const [typeData, setTypeData] = useState();
+
 
     const navigate = useNavigate();
 
@@ -37,6 +39,8 @@ const ChatProvider=({children})=>{
             setTyping,
             isTyping, 
             setIsTyping,
+            typeData, 
+            setTypeData
         }}
         >
             {children}
