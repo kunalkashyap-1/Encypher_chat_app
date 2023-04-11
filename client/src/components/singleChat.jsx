@@ -122,6 +122,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
   useEffect(() => {
     fetchMessages();
 
+    // socket.on('activeUsers', (activeUsers) => {
+    //   // Update the list of active users in your UI
+    // });
+
     currChatCompare = currChat;
     // eslint-disable-next-line
   }, [currChat]);
@@ -130,7 +134,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     socket.on("messageRecieved", (newMessage) => {
       if (!currChatCompare || currChatCompare._id !== newMessage.chat._id) {
         if (!notif.includes(newMessage)) {
-          setNotif([newMessage, ...notif]);
+          //make the notif api request here to fetch the notifs
+          setNotif([...notif, newMessage]);
           setFetchAgain(!fetchAgain);
         }
       } else {

@@ -18,6 +18,8 @@ import UserListItem from "./userListItem";
 import { getSender } from "../config/chatLogics.js";
 
 import axios from "axios";
+import io from "socket.io-client";
+
 
 function SideDrawer(props) {
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ function SideDrawer(props) {
   const open1 = Boolean(anchorEl1);
   const open2 = Boolean(anchorEl2);
 
+  const ENDPOINT = "http://localhost:8383";
   const style = {
     // color: "#fff",
     background: "rgb(211,211,211,0.5)",
@@ -41,6 +44,9 @@ function SideDrawer(props) {
   };
   const logOutHandler = () => {
     localStorage.removeItem("userInfo");
+    const socket = io(ENDPOINT);
+    socket.emit("logOut",user);
+
     navigate("/");
   };
   const handleClose2 = () => {

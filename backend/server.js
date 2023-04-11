@@ -17,12 +17,14 @@ connectDB();
 const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
+const notificationRoutes = require("./Routes/notificationRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 app.use(express.json()); //to accept JSON data
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/notif", notificationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -44,9 +46,12 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   // console.log("connected to socket.io");
+  const activeUsers = {};
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);
+    activeUsers[userData._id];
+    io.emit('activeUsers', activeUsers);
     socket.emit("connected");
   });
 
@@ -55,7 +60,7 @@ io.on("connection", (socket) => {
     // console.log("user joined room: " + room);
   });
 
-  socket.on("typing", (args) => {
+  socket.on("typing", async (args) => {
     socket
       .in(args.room)
       .emit("typing", args);
@@ -76,8 +81,10 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.off("setup", () => {
-    console.log("User Disconneccted");
-    socket.leave(userData._id);
+  socket.on("logOut", (user) => {
+    // console.log("User Disconnected");
+    delete activeUsers[userData._id];
+    io.emit('activeUsers', activeUsers);
+    socket.leave(user._id);
   });
 });
