@@ -8,7 +8,7 @@ const connectDB = async() =>{
             dbName: "Encypher",
         });
 
-        console.log(`mongodb connected: ${conn.connection.host}`);
+        // console.log(`mongodb connected: ${conn.connection.host}`);
     }catch(error){
         console.log(`ERROR : ${error.message}`)
         process.exit();
