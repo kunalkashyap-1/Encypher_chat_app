@@ -15,7 +15,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { Player } from "@lottiefiles/react-lottie-player";
 import typingAnimation from "../animations/3759-typing.json";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 const styleText = {
   // color: "#fff",
@@ -36,12 +36,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     notif,
     setNotif,
     typeData,
-    setTypeData,
+    setTypeData
   } = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const [socketConnected, setsocketConnected] = useState(false);
+  const [isUserOnline, setIsUserOnline] = useState(false);
+  
 
   const fetchMessages = async () => {
     if (!currChat) return;
@@ -71,9 +73,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     }
   };
 
+  // const sendNotif= async (Message)=>{
+  //   try{
+  //     const config = {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //     };
+
+  //     const { data } = await axios.post(
+  //       `http://localhost:8383/api/notif`,
+  //       {
+  //         content: Message.content,
+  //         chatId: Message.chat._id,
+  //       },
+  //       config
+  //     );
+
+  //     setNotif([...notif, data]);
+  //   }catch(error){
+  //     const open = {
+  //       vis: true,
+  //       message: "failed to send the notification",
+  //     };
+  //     snack(open);
+  //   }
+  // };
+
   const sendMessage = async (e) => {
     if (newMessage) {
       socket.emit("stop typing", currChat._id);
+      if(currChat){
+        socket.emit("userUpdate",getSender(user, currChat.users)._id);
+        }
       try {
         const config = {
           headers: {
@@ -91,7 +124,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
           config
         );
         setNewMessage("");
-
+        
         socket.emit("newMessage", data);
         setMessages([...messages, data]);
       } catch (error) {
@@ -104,6 +137,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     }
   };
 
+  
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
@@ -116,15 +150,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
     });
     socket.on("stopTyping", () => setIsTyping(false));
 
+    // socket.on("notifRecieved",(message)=>{
+    //   // sendNotif(message);
+    // });
+
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     fetchMessages();
-
-    // socket.on('activeUsers', (activeUsers) => {
-    //   // Update the list of active users in your UI
-    // });
+    if(currChat){
+    socket.emit("userUpdate",getSender(user, currChat.users)._id);
+    }
 
     currChatCompare = currChat;
     // eslint-disable-next-line
@@ -133,8 +170,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
   useEffect(() => {
     socket.on("messageRecieved", (newMessage) => {
       if (!currChatCompare || currChatCompare._id !== newMessage.chat._id) {
-        if (!notif.includes(newMessage)) {
-          //make the notif api request here to fetch the notifs
+        if (!notif.includes(newMessage) && isUserOnline) {
+          // Notif(newMessage);
           setNotif([...notif, newMessage]);
           setFetchAgain(!fetchAgain);
         }
@@ -143,6 +180,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
         setFetchAgain(!fetchAgain);
       }
     });
+    
+
+    socket.on("userUpdate",(isOnline)=>{
+      setIsUserOnline(isOnline);
+    });
+
   });
 
   const typingHandler = (e) => {
@@ -204,6 +247,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
                       <>
                         <Player autoplay loop src={typingAnimation} />
                       </>
+                    ) : isUserOnline ? (
+                      "Online"
                     ) : (
                       "Click here for details"
                     )}

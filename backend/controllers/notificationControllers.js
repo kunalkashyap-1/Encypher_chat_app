@@ -3,7 +3,7 @@ const Notification = require("../models/notifModel");
 const User = require("../models/userModel");
 const Chat = require("../models/chatModel");
 
-//@description     Create a new notification
+//@description     fetch all notification of the user
 //@route           POST /api/Message/notif
 //@access          Protected
 
@@ -49,13 +49,17 @@ const sendNotif = asyncHandler(async (req, res) => {
       select: "name image ",
     });
 
-//   console.log(notif);
+  // console.log(notif);
     res.json(notif);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
 });
+
+//@description     delete the notification
+//@route           POST /api/Message/notif
+//@access          Protected
 
 const deleteNotif = asyncHandler(async (req, res) => {
   try {

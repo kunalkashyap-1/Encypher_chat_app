@@ -20,10 +20,10 @@ import { getSender } from "../config/chatLogics.js";
 import axios from "axios";
 import io from "socket.io-client";
 
-
 function SideDrawer(props) {
   const navigate = useNavigate();
-  const { user, setCurrChat, chats, setChats, notif, setNotif } = ChatState();
+  const { user, currChat, setCurrChat, chats, setChats, notif, setNotif } =
+    ChatState();
   const [isActive, setIsActive] = useState(false);
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -45,8 +45,10 @@ function SideDrawer(props) {
   const logOutHandler = () => {
     localStorage.removeItem("userInfo");
     const socket = io(ENDPOINT);
-    socket.emit("logOut",user);
-
+    socket.emit("logOut", user);
+    if (currChat) {
+      socket.emit("userUpdate", getSender(user, currChat.users)._id);
+    }
     navigate("/");
   };
   const handleClose2 = () => {
@@ -237,11 +239,11 @@ function SideDrawer(props) {
             "aria-labelledby": "basic-button2",
           }}
         >
-            <MenuItem >
-          <Profile user={user}>
+          <MenuItem>
+            <Profile user={user}>
               <Button onClick={handleClose2}>My Profile</Button>
-          </Profile>
-              </MenuItem>
+            </Profile>
+          </MenuItem>
           <MenuItem onClick={logOutHandler}>Log Out</MenuItem>
         </Menu>
       </div>

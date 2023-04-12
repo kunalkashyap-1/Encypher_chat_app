@@ -44,15 +44,19 @@ const io = require("socket.io")(server, {
   },
 });
 
+const activeUsers = {};
+
 io.on("connection", (socket) => {
   // console.log("connected to socket.io");
-  const activeUsers = {};
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);
-    activeUsers[userData._id];
-    io.emit('activeUsers', activeUsers);
+    activeUsers[userData._id]=true;
     socket.emit("connected");
+  });
+
+  socket.on("userUpdate",(userId)=>{
+    socket.emit("userUpdate",userId in activeUsers);
   });
 
   socket.on("join chat", (room) => {
@@ -78,13 +82,14 @@ io.on("connection", (socket) => {
     chat.users.forEach((user) => {
       if (user._id == newMessage.sender._id) return;
       socket.in(user._id).emit("messageRecieved", newMessage);
+      socket.in(user._id).emit("notifRecieved", newMessage);
     });
   });
 
   socket.on("logOut", (user) => {
     // console.log("User Disconnected");
-    delete activeUsers[userData._id];
-    io.emit('activeUsers', activeUsers);
+    delete activeUsers[user._id];
+    // socket.emit("logOut",user._id);
     socket.leave(user._id);
   });
 });
