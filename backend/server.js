@@ -13,6 +13,20 @@ app.use(
   })
 );
 
+const passport = require("passport");
+const session = require("express-session");
+
+
+app.use(session({
+  secret:process.env.SECRETSTRING,
+  resave:false,
+  saveUninitialized:false,
+  // cookies:{secure:true}
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 const connectDB = require("./configs/DB");
 connectDB();
 
