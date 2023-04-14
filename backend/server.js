@@ -4,7 +4,9 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000","*",null],
+}));
 app.use(
   express.urlencoded({
     extended: true,
@@ -18,6 +20,7 @@ const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
 const notificationRoutes = require("./Routes/notificationRoutes");
+const OAuthRoutes = require("./Routes/OAuthRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 app.use(express.json()); //to accept JSON data
@@ -25,6 +28,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/notif", notificationRoutes);
+app.use("/auth", OAuthRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -51,12 +55,12 @@ io.on("connection", (socket) => {
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);
-    activeUsers[userData._id]=true;
+    activeUsers[userData._id] = true;
     socket.emit("connected");
   });
 
-  socket.on("userUpdate",(userId)=>{
-    socket.emit("userUpdate",userId in activeUsers);
+  socket.on("userUpdate", (userId) => {
+    socket.emit("userUpdate", userId in activeUsers);
   });
 
   socket.on("join chat", (room) => {
@@ -65,9 +69,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("typing", async (args) => {
-    socket
-      .in(args.room)
-      .emit("typing", args);
+    socket.in(args.room).emit("typing", args);
   });
 
   socket.on("stopTyping", (room) => {

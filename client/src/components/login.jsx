@@ -1,47 +1,55 @@
-import { TextField,
-   Button,
-   CircularProgress,
-  } from "@mui/material";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import background from ".//aurora.jpg";
 import { useState } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {useEffect} from "react";
-
-
-
+import { useEffect } from "react";
 
 function Login(props) {
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
 
-    if(user){
+    if (user) {
       navigate("/chats");
     }
-  },[navigate]);
+  }, [navigate]);
 
+  const [email, setEmail] = useState();
+  const [passwd, setPasswd] = useState();
+  const [loading, setLoading] = useState(false);
 
-  const [email,setEmail] = useState();
-  const [passwd,setPasswd] = useState();
-  const [loading,setLoading] = useState(false);
+  const OAuthHandler = async () => {
+    try {
+      setLoading(true);
 
-  const OAuthHandler = ()=>{
-    const open = {
-      vis: true,
-      message: "Feature coming soon!",
-    };
-    props.isOpen(open);
-  }
+      const { data } = await axios.get("http://localhost:8383/auth/google");
 
-  const onSubmit = async ()=>{
-    if(!email || !passwd){
+      console.log(JSON.stringify(data));
+      // localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      // if(!loading){
+      //   navigate("/chats");
+      // }
+    } catch (error) {
+      console.log(error);
       const open = {
-        vis:true,
-        message:"Please fill all the feilds"
-      }
+        vis: true,
+        message: error.message,
+      };
+      props.isOpen(open);
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async () => {
+    if (!email || !passwd) {
+      const open = {
+        vis: true,
+        message: "Please fill all the feilds",
+      };
       props.isOpen(open);
       return;
     }
@@ -54,7 +62,8 @@ function Login(props) {
         },
       };
 
-      const { data } = await axios.post("http://localhost:8383/api/user/login",
+      const { data } = await axios.post(
+        "http://localhost:8383/api/user/login",
         { email, passwd },
         config
       );
@@ -62,26 +71,25 @@ function Login(props) {
       // console.log(JSON.stringify(data));
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      if(!loading){
+      if (!loading) {
         navigate("/chats");
       }
     } catch (error) {
       const open = {
-        vis:true,
-        message:error.message
-      }
+        vis: true,
+        message: error.message,
+      };
       props.isOpen(open);
-        console.log(error.response.data.message);
-        setLoading(false);
+      console.log(error.response.data.message);
+      setLoading(false);
     }
-  }
+  };
 
   const style = {
     color: "#fff",
     background: "rgb(211,211,211,0.5)",
-    "border-radius": 20,
+    "borderRadius": 20,
   };
-
 
   return (
     <div id="back" style={{ backgroundImage: `url(${background})` }}>
@@ -96,72 +104,83 @@ function Login(props) {
           <form>
             <table>
               <tbody>
-              <tr>
-                <td>
-                  <h1>Login</h1>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <TextField
-                    id="outlined-basic"
-                    label="Email"
-                    variant="filled"
-                    InputLabelProps={{style: { color: '#fff' }}}
-                    InputProps={{ style: style, disableUnderline: true }}
-                    size="large"
-                    onChange={(e)=>{setEmail(e.target.value)}}
-                    sx={{ mr: 4, width: 300 }}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <TextField
-                    id="outlined-password-input"
-                    label="Password"
-                    variant="filled"
-                    type="password"
-                    InputLabelProps={{style: { color: '#fff' }}}
-                    InputProps={{ style: style, disableUnderline: true }}
-                    size="large"
-                    onChange={(e)=>{setPasswd(e.target.value)}}
-                    sx={{ mr: 4, width: 300 }}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div style={{
-                    display:"flex",
-                    gap:"1rem",
-                    }}>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    sx={{ size: "medium" }}
-                    onClick={onSubmit}
-                  >
-                    Login
-                  </Button>
-                  {loading?<CircularProgress/>:<></>}
-                  <Button
-                    variant="contained"
-                    color="error"
-                    sx={{ size: "medium" }}
-                    onClick={OAuthHandler}
-                  >
-                    GMail
-                  </Button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>Don't have an account?
-                  <Link className="anchor" to="/signup"> Sign up</Link></p>
-                </td>
-              </tr>
+                <tr>
+                  <td>
+                    <h1>Login</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <TextField
+                      id="outlined-basic"
+                      label="Email"
+                      variant="filled"
+                      InputLabelProps={{ style: { color: "#fff" } }}
+                      InputProps={{ style: style, disableUnderline: true }}
+                      size="large"
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                      sx={{ mr: 4, width: 300 }}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <TextField
+                      id="outlined-password-input"
+                      label="Password"
+                      variant="filled"
+                      type="password"
+                      InputLabelProps={{ style: { color: "#fff" } }}
+                      InputProps={{ style: style, disableUnderline: true }}
+                      size="large"
+                      onChange={(e) => {
+                        setPasswd(e.target.value);
+                      }}
+                      sx={{ mr: 4, width: 300 }}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "1rem",
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="success"
+                        sx={{ size: "medium" }}
+                        onClick={onSubmit}
+                      >
+                        Login
+                      </Button>
+                      {loading ? <CircularProgress /> : <></>}
+                      <Button
+                        variant="contained"
+                        color="error"
+                        sx={{ size: "medium" }}
+                        onClick={OAuthHandler}
+                      >
+                        GMail
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p>
+                      Don't have an account?
+                      <Link className="anchor" to="/signup">
+                        {" "}
+                        Sign up
+                      </Link>
+                    </p>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </form>
