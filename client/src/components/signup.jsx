@@ -19,15 +19,34 @@ function Signup(props) {
     "https://i0.wp.com/www.artstation.com/assets/default_avatar.jpg?ssl=1";
   let imgFile;
 
-  const OAuthHandler = () => {
-    const open = {
-      vis: true,
-      message: "Feature coming soon!",
-    };
-    props.isOpen(open);
+  const OAuthHandler = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:8383/auth/google");
+
+      console.log(JSON.stringify(data));
+      // localStorage.setItem("userInfo", JSON.stringify(data));
+      // if(!loading){
+      //   navigate("/chats");
+      // }
+    } catch (error) {
+      console.log(error);
+      const open = {
+        vis: true,
+        message: error.message,
+      };
+      props.isOpen(open);
+    }
   };
 
   const onSubmit = async () => {
+    if(!email.includes("@")){
+      const open = {
+        vis: true,
+        message: "Please enter valid E-Mail",
+      };
+      props.isOpen(open);
+      return;
+    }
     if (!fname || !email || !passwd || !cnfmPasswd) {
       const open = {
         vis: true,
@@ -130,30 +149,36 @@ function Signup(props) {
               </tr>
               <tr>
                 <td>
-                  <TextField
-                    label="First name"
-                    variant="filled"
-                    InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: style, disableUnderline: true }}
-                    size="large"
-                    onChange={(e) => {
-                      setFname(e.target.value);
-                    }}
-                    sx={{ mr: 4, width: 300 }}
-                  />
+                  <div id="names">
+                    <TextField
+                      label="First name"
+                      variant="filled"
+                      InputLabelProps={{ style: { color: "#fff" } }}
+                      InputProps={{
+                        style: style,
+                        disableUnderline: true,
+                        id: "fname",
+                      }}
+                      size="large"
+                      onChange={(e) => {
+                        setFname(e.target.value);
+                      }}
+                      sx={{ mr: 4, width: 300 }}
+                    />
 
-                  <TextField
-                    id="outlined-basic"
-                    label="Last name"
-                    variant="filled"
-                    InputLabelProps={{ style: { color: "#fff" } }}
-                    InputProps={{ style: style, disableUnderline: true }}
-                    size="large"
-                    onChange={(e) => {
-                      setLname(e.target.value);
-                    }}
-                    sx={{ mr: 5, width: 300 }}
-                  />
+                    <TextField
+                      id="outlined-basic"
+                      label="Last name"
+                      variant="filled"
+                      InputLabelProps={{ style: { color: "#fff" } }}
+                      InputProps={{ style: style, disableUnderline: true }}
+                      size="large"
+                      onChange={(e) => {
+                        setLname(e.target.value);
+                      }}
+                      sx={{ mr: 5, width: 300 }}
+                    />
+                  </div>
                 </td>
               </tr>
               <tr>

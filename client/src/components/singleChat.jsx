@@ -16,10 +16,12 @@ import io from "socket.io-client";
 import { Player } from "@lottiefiles/react-lottie-player";
 import typingAnimation from "../animations/3759-typing.json";
 import SendIcon from "@mui/icons-material/Send";
+import messageBackground from ".//image.png";
+
 
 const styleText = {
-  // color: "#fff",
-  background: "rgb(211,211,211,0.5)",
+  color: "#fff",
+  background: "rgb(54,58,61,0.5)",
 };
 
 const ENDPOINT = "http://localhost:8383";
@@ -305,7 +307,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
               </div>
             </div>
           )}
-          <div id="messageSection">
+          <div id="messageSection" style={{backgroundImage:`url(${messageBackground})`}}>
             {loading ? (
               <CircularProgress
                 style={{
@@ -331,6 +333,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
             }}
           >
             <TextField
+              id="messageInput"
               fullWidth
               placeholder="Type a message"
               variant="outlined"

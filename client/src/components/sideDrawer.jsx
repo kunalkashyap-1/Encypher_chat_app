@@ -121,8 +121,12 @@ function SideDrawer(props) {
 
   return (
     <div className="header">
-      <div>
-        <Button onClick={toggler}>
+      <div style={{alignSelf:"center"}}>
+        <Button onClick={toggler}
+          sx={{
+            color:"white"
+          }}
+        >
           <PersonSearchIcon />
           Search User
         </Button>
@@ -177,6 +181,9 @@ function SideDrawer(props) {
           aria-haspopup="true"
           aria-expanded={open1 ? "true" : undefined}
           onClick={handleClick1}
+          sx={{
+            color:"white"
+          }}
         >
           <Badge badgeContent={notif.length} color="error">
             <NotificationsIcon />

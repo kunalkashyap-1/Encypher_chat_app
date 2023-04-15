@@ -4,7 +4,7 @@ import axios from "axios";
 import { getSender } from "../config/chatLogics.js";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import GroupChatModal from "./Modals/groupChatModal.jsx";
-import ChatLoading from "./chatLoading"
+import ChatLoading from "./chatLoading";
 import { Button } from "@mui/material";
 
 function MyChats(props) {
@@ -34,14 +34,11 @@ function MyChats(props) {
     }
   };
 
-  useEffect(
-    () => {
+  useEffect(() => {
       setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
       fetchChat();
-    },
     // eslint-disable-next-line
-    [props.fetchAgain]
-  );
+    },[props.fetchAgain]);
 
   return (
     <div id="chat">
@@ -63,6 +60,13 @@ function MyChats(props) {
           {chats.map((chat) => (
             <div
               className="chatBox"
+              style={{
+                backgroundColor: currChat
+                  ? currChat._id === chat._id
+                    ? " rgb(54,58,61) "
+                    : ""
+                  : "",
+              }}
               onClick={() => {
                 setCurrChat(chat);
               }}
@@ -78,12 +82,16 @@ function MyChats(props) {
                     ? getSender(loggedUser, chat.users).name
                     : chat.chatName}
                 </p>
-                <p >
-                  {isTyping && typeData.room !== currChat._id && typeData.room === chat._id? (
+                <p>
+                  {isTyping &&
+                  typeData.room !== currChat._id &&
+                  typeData.room === chat._id ? (
                     chat.isGroupChat ? (
-                      <span style={{color:"green"}}>{typeData.typist + " is typing..."}</span>
+                      <span style={{ color: "#39FF14" }}>
+                        {typeData.typist + " is typing..."}
+                      </span>
                     ) : (
-                      <span style={{color:"green"}}>Typing...</span>
+                      <span style={{ color: "#39FF14" }}>Typing...</span>
                     )
                   ) : (
                     <>

@@ -45,6 +45,15 @@ function Login(props) {
   };
 
   const onSubmit = async () => {
+    if(!email.includes("@")){
+      const open = {
+        vis: true,
+        message: "Please enter valid E-Mail",
+      };
+      props.isOpen(open);
+      return;
+    }
+
     if (!email || !passwd) {
       const open = {
         vis: true,
@@ -158,7 +167,7 @@ function Login(props) {
                       >
                         Login
                       </Button>
-                      {loading ? <CircularProgress /> : <></>}
+                      
                       <Button
                         variant="contained"
                         color="error"
@@ -167,6 +176,7 @@ function Login(props) {
                       >
                         GMail
                       </Button>
+                      {loading ? <CircularProgress /> : <></>}
                     </div>
                   </td>
                 </tr>
