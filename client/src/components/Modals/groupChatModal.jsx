@@ -14,15 +14,15 @@ const style = {
   bgcolor: "background.paper",
   // border: '2px solid #000',
   boxShadow: 24,
-  "border-radius": "15px",
+  borderRadius: "15px",
   p: 4,
 };
 
 const styleText = {
   // color: "#fff",
   background: "rgb(211,211,211,0.5)",
-  "border-radius": 20,
-  "margin-bottom": "1rem",
+  borderRadius: 20,
+  marginBottom: "1rem",
 };
 
 const GroupChatModal = (props) => {

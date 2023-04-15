@@ -27,7 +27,7 @@ function SideDrawer(props) {
   const [isActive, setIsActive] = useState(false);
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState(null);
   const open1 = Boolean(anchorEl1);
   const open2 = Boolean(anchorEl2);
@@ -36,7 +36,7 @@ function SideDrawer(props) {
   const style = {
     // color: "#fff",
     background: "rgb(211,211,211,0.5)",
-    "border-radius": 20,
+    borderRadius: 20,
   };
 
   const toggler = () => {

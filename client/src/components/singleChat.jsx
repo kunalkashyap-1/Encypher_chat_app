@@ -42,7 +42,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
   } = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newMessage, setNewMessage] = useState();
+  const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setsocketConnected] = useState(false);
   const [isUserOnline, setIsUserOnline] = useState(false);
   
@@ -129,6 +129,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
         
         socket.emit("newMessage", data);
         setMessages([...messages, data]);
+        setFetchAgain(!fetchAgain);
       } catch (error) {
         const open = {
           vis: true,
@@ -337,7 +338,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
               fullWidth
               placeholder="Type a message"
               variant="outlined"
-              InputProps={{ style: styleText, disableUnderline: true }}
+              InputProps={{ style: styleText}}
               onChange={typingHandler}
               value={newMessage}
             />

@@ -23,7 +23,7 @@ const style = {
 const styleText = {
   // color: "#fff",
   background: "rgb(211,211,211,0.5)",
-  "border-radius": 20,
+  borderRadius: 20,
 };
 
 const UpdateGroupModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {

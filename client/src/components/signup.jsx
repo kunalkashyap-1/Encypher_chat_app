@@ -39,14 +39,6 @@ function Signup(props) {
   };
 
   const onSubmit = async () => {
-    if(!email.includes("@")){
-      const open = {
-        vis: true,
-        message: "Please enter valid E-Mail",
-      };
-      props.isOpen(open);
-      return;
-    }
     if (!fname || !email || !passwd || !cnfmPasswd) {
       const open = {
         vis: true,
@@ -55,6 +47,16 @@ function Signup(props) {
       props.isOpen(open);
       return;
     }
+
+    if(!email.includes("@")){
+      const open = {
+        vis: true,
+        message: "Please enter valid E-Mail",
+      };
+      props.isOpen(open);
+      return;
+    }
+    
     if (passwd !== cnfmPasswd) {
       const open = {
         vis: true,
@@ -114,7 +116,7 @@ function Signup(props) {
   const style = {
     color: "#fff",
     background: "rgb(211,211,211,0.5)",
-    "border-radius": 20,
+    borderRadius: 20,
   };
 
   return (
@@ -140,12 +142,14 @@ function Signup(props) {
                 </td>
               </tr>
               <tr>
+                <td>
                 <ImgUpload
                   data={(imgData) => {
                     console.log(imgData.get("file"));
                     setImgData(imgData);
                   }}
                 />
+                </td>
               </tr>
               <tr>
                 <td>
@@ -167,7 +171,6 @@ function Signup(props) {
                     />
 
                     <TextField
-                      id="outlined-basic"
                       label="Last name"
                       variant="filled"
                       InputLabelProps={{ style: { color: "#fff" } }}
@@ -184,7 +187,6 @@ function Signup(props) {
               <tr>
                 <td>
                   <TextField
-                    id="outlined-basic"
                     label="Email"
                     variant="filled"
                     InputLabelProps={{ style: { color: "#fff" } }}
@@ -200,7 +202,6 @@ function Signup(props) {
               <tr>
                 <td>
                   <TextField
-                    id="outlined-password-input"
                     label="Password"
                     variant="filled"
                     type="password"
@@ -217,7 +218,6 @@ function Signup(props) {
               <tr>
                 <td>
                   <TextField
-                    id="outlined-password-input"
                     label="Confirm Password"
                     variant="filled"
                     type="password"
