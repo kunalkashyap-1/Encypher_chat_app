@@ -45,7 +45,6 @@ function Login(props) {
   };
 
   const onSubmit = async () => {
-
     if (!email || !passwd) {
       const open = {
         vis: true,
@@ -55,7 +54,7 @@ function Login(props) {
       return;
     }
 
-    if(!email.includes("@")){
+    if (!email.includes("@")) {
       const open = {
         vis: true,
         message: "Please enter valid E-Mail",
@@ -98,7 +97,7 @@ function Login(props) {
   const style = {
     color: "#fff",
     background: "rgb(211,211,211,0.5)",
-    "borderRadius": 20,
+    borderRadius: 20,
   };
 
   return (
@@ -106,9 +105,7 @@ function Login(props) {
       <div className="blur">
         <div className="login-data">
           <h1>Encypher</h1>
-          <h2>
-            this would be some data which would be given after the mvp is done
-          </h2>
+          <h3>Stay connected, stay safe with Encypher.</h3>
         </div>
         <div className="login">
           <form>
@@ -168,7 +165,7 @@ function Login(props) {
                       >
                         Login
                       </Button>
-                      
+
                       <Button
                         variant="contained"
                         color="error"
