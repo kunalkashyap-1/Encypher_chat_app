@@ -28,11 +28,11 @@ function Login(props) {
     //   const { data } = await axios.get("http://localhost:8383/auth/google");
 
     //   console.log(JSON.stringify(data));
-    //   // localStorage.setItem("userInfo", JSON.stringify(data));
+    //   localStorage.setItem("userInfo", JSON.stringify(data));
     //   setLoading(false);
-    //   // if(!loading){
-    //   //   navigate("/chats");
-    //   // }
+    //   if(!loading){
+    //     navigate("/chats");
+    //   }
     // } catch (error) {
     //   console.log(error);
     //   const open = {
@@ -43,10 +43,7 @@ function Login(props) {
     //   setLoading(false);
     // }
 
-    // const authWindow = window.open(
-    //   "http://localhost:8383/auth/google",
-    //   "_self"
-    // );
+    window.open("http://localhost:8383/auth/google", "_self");
   };
 
   const onSubmit = async () => {
