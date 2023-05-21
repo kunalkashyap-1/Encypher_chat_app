@@ -53,7 +53,8 @@ const callBack = asyncHandler(async (req, res, next) => {
     "google",
     {
       failureRedirect: "http://localhost:3000",
-    },
+    }
+    ,
     (err, user) => {
       if (err) {
         return next(err);

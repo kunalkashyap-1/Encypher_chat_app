@@ -22,26 +22,31 @@ function Login(props) {
   const [loading, setLoading] = useState(false);
 
   const OAuthHandler = async () => {
-    try {
-      setLoading(true);
+    // try {
+    //   setLoading(true);
 
-      const { data } = await axios.get("http://localhost:8383/auth/google");
+    //   const { data } = await axios.get("http://localhost:8383/auth/google");
 
-      console.log(JSON.stringify(data));
-      // localStorage.setItem("userInfo", JSON.stringify(data));
-      setLoading(false);
-      // if(!loading){
-      //   navigate("/chats");
-      // }
-    } catch (error) {
-      console.log(error);
-      const open = {
-        vis: true,
-        message: error.message,
-      };
-      props.isOpen(open);
-      setLoading(false);
-    }
+    //   console.log(JSON.stringify(data));
+    //   // localStorage.setItem("userInfo", JSON.stringify(data));
+    //   setLoading(false);
+    //   // if(!loading){
+    //   //   navigate("/chats");
+    //   // }
+    // } catch (error) {
+    //   console.log(error);
+    //   const open = {
+    //     vis: true,
+    //     message: error.message,
+    //   };
+    //   props.isOpen(open);
+    //   setLoading(false);
+    // }
+
+    // const authWindow = window.open(
+    //   "http://localhost:8383/auth/google",
+    //   "_self"
+    // );
   };
 
   const onSubmit = async () => {
