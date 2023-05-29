@@ -48,7 +48,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 app.get("/", (req, res) => {
-  res.send("<h1>API is running</h1>");
+  res.json({API is running});
 });
 
 const server = app.listen(process.env.PORT, () => {
