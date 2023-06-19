@@ -15,10 +15,15 @@ app.use(
 
 const passport = require("passport");
 const session = require("express-session");
+const MemoryStore = require('memorystore')(session);
 
 
 app.use(session({
+  cookie: { maxAge: 86400000 },
   secret:process.env.SECRETSTRING,
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   resave:false,
   saveUninitialized:false,
   // cookies:{secure:true}
@@ -44,12 +49,14 @@ app.use("/api/message", messageRoutes);
 app.use("/api/notif", notificationRoutes);
 app.use("/auth", OAuthRoutes);
 
-app.use(notFound);
-app.use(errorHandler);
-
 app.get("/", (req, res) => {
   res.json({message:"API is running"});
 });
+
+app.use(notFound);
+app.use(errorHandler);
+
+
 
 const server = app.listen(process.env.PORT, () => {
   console.log("Server running on port");
