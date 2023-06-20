@@ -32,7 +32,7 @@ function SideDrawer(props) {
   const open1 = Boolean(anchorEl1);
   const open2 = Boolean(anchorEl2);
 
-  const ENDPOINT = "http://localhost:8383";
+  const ENDPOINT = "https://encypher-backend.onrender.com";
   const style = {
     // color: "#fff",
     background: "rgb(211,211,211,0.5)",
