@@ -5,7 +5,7 @@ const app = express();
 
 const cors = require("cors");
 app.use(cors({
-  origin: ["http://localhost:3000","*",null],
+  origin: ["http://localhost:3000","https://encypher.vercel.app","*",null],
 }));
 app.use(
   express.urlencoded({
