@@ -46,7 +46,7 @@ function Login(props) {
     window.open("https://encypher-backend.onrender.com/auth/google", "_self");
   };
 
-  const onSubmit = async () => {
+  const Submit = async () => {
     if (!email || !passwd) {
       const open = {
         vis: true,
@@ -110,7 +110,10 @@ function Login(props) {
           <h3>Stay connected, stay safe with Encypher.</h3>
         </div>
         <div className="login">
-          <form>
+          <form onSubmit={(e)=>{
+            e.preventDefault();
+            Submit();
+          }}>
             <table>
               <tbody>
                 <tr>
@@ -162,8 +165,9 @@ function Login(props) {
                       <Button
                         variant="contained"
                         color="success"
+                        type="submit"
                         sx={{ size: "medium" }}
-                        onClick={onSubmit}
+                        onClick={Submit}
                       >
                         Login
                       </Button>

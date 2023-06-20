@@ -24,7 +24,7 @@ const styleText = {
   background: "rgb(54,58,61,0.5)",
 };
 
-const ENDPOINT = "http://localhost:8383";
+const ENDPOINT = "https://encypher-backend.onrender.com";
 let socket, currChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
