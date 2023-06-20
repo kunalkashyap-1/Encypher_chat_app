@@ -59,7 +59,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
 
       setLoading(true);
       const { data } = await axios.get(
-        `http://localhost:8383/api/message/${currChat._id}`,
+        `https://encypher-backend.onrender.com/api/message/${currChat._id}`,
         config
       );
       setMessages(data);
@@ -118,7 +118,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, snack }) => {
         };
 
         const { data } = await axios.post(
-          `http://localhost:8383/api/message`,
+          `https://encypher-backend.onrender.com/api/message`,
           {
             content: newMessage,
             chatId: currChat._id,

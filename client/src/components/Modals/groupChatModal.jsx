@@ -48,7 +48,7 @@ const GroupChatModal = (props) => {
         },
       };
       const { data } = await axios.get(
-        `http://localhost:8383/api/user?search=${search}`,
+        `https://encypher-backend.onrender.com/api/user?search=${search}`,
         config
       );
       setSearchResult(data);
@@ -87,7 +87,7 @@ const GroupChatModal = (props) => {
         },
       };
       const { data } = await axios.post(
-        `http://localhost:8383/api/chat/group`,
+        `https://encypher-backend.onrender.com/api/chat/group`,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

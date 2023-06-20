@@ -61,7 +61,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
             },
           };
           const { data } = await axios.put(
-            `http://localhost:8383/api/chat/rename`,
+            `https://encypher-backend.onrender.com/api/chat/rename`,
             {
               chatId: currChat._id,
               chatName: groupChatName,
@@ -93,7 +93,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         },
       };
       const { data } = await axios.get(
-        `http://localhost:8383/api/user?search=${search}`,
+        `https://encypher-backend.onrender.com/api/user?search=${search}`,
         config
       );
       setSearchResult(data);
@@ -123,7 +123,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         },
       };
       const { data } = await axios.put(
-        `http://localhost:8383/api/chat/groupremove`,
+        `https://encypher-backend.onrender.com/api/chat/groupremove`,
         {
           chatId: currChat._id,
           userId: user1._id,
@@ -170,7 +170,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         },
       };
       const { data } = await axios.put(
-        `http://localhost:8383/api/chat/groupadd`,
+        `https://encypher-backend.onrender.com/api/chat/groupadd`,
         {
           chatId: currChat._id,
           userId: user1._id,

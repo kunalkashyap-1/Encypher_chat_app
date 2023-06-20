@@ -79,7 +79,7 @@ function SideDrawer(props) {
       };
 
       const { data } = await axios.get(
-        `http://localhost:8383/api/user?search=${search}`,
+        `https://encypher-backend.onrender.com/api/user?search=${search}`,
         config
       );
       setSearchResult(data);
@@ -101,7 +101,7 @@ function SideDrawer(props) {
         },
       };
       const { data } = await axios.post(
-        "http://localhost:8383/api/chat",
+        "https://encypher-backend.onrender.com/api/chat",
         { userId },
         config
       );

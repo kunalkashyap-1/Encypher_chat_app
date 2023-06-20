@@ -21,7 +21,7 @@ function Signup(props) {
 
   const OAuthHandler = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8383/auth/google");
+      const { data } = await axios.get("https://encypher-backend.onrender.com/auth/google");
 
       console.log(JSON.stringify(data));
       // localStorage.setItem("userInfo", JSON.stringify(data));
@@ -83,7 +83,7 @@ function Signup(props) {
     }
 
     axios
-      .post(`http://localhost:8383/api/user/img`, imgFile, {
+      .post(`https://encypher-backend.onrender.com/api/user/img`, imgFile, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -91,7 +91,7 @@ function Signup(props) {
       .then((imgLink) => {
         axios
           .post(
-            "http://localhost:8383/api/user",
+            "https://encypher-backend.onrender.com/api/user",
             {
               name: `${fname} ${lname}`,
               email,

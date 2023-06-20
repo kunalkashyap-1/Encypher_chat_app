@@ -43,7 +43,7 @@ function Login(props) {
     //   setLoading(false);
     // }
 
-    window.open("http://localhost:8383/auth/google", "_self");
+    window.open("https://encypher-backend.onrender.com/auth/google", "_self");
   };
 
   const onSubmit = async () => {
@@ -74,7 +74,7 @@ function Login(props) {
       };
 
       const { data } = await axios.post(
-        "http://localhost:8383/api/user/login",
+       "https://encypher-backend.onrender.com/api/user/login",
         { email, passwd },
         config
       );

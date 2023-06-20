@@ -21,7 +21,7 @@ function MyChats(props) {
       };
 
       const { data } = await axios.get(
-        "http://localhost:8383/api/chat",
+        "https://encypher-backend.onrender.com/api/chat",
         config
       );
       setChats(data);
