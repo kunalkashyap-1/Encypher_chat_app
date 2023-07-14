@@ -21,7 +21,7 @@ const style = {
 const styleText = {
   // color: "#fff",
   background: "rgb(211,211,211,0.5)",
-  borderRadius: 20,
+  borderRadius: 15,
   marginBottom: "1rem",
 };
 
@@ -129,7 +129,7 @@ const GroupChatModal = (props) => {
       return;
     }
 
-    setSelectedUsers([...selectedUsers,userToAdd]);
+    setSelectedUsers([...selectedUsers, userToAdd]);
   };
 
   return (
@@ -141,7 +141,14 @@ const GroupChatModal = (props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box
+          sx={style}
+          id="group_modal"
+          style={{
+            "max-height": "95vh",
+            overflowY: "scroll",
+          }}
+        >
           <Typography
             id="modal-modal-title"
             variant="h6"
@@ -150,7 +157,11 @@ const GroupChatModal = (props) => {
           >
             Create Group Chat
           </Typography>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <TextField
               fullWidth
               id="outlined-basic"
@@ -165,7 +176,11 @@ const GroupChatModal = (props) => {
               // sx={{ mt: 2}}
             />
           </form>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <TextField
               fullWidth
               id="outlined-basic"
@@ -181,12 +196,17 @@ const GroupChatModal = (props) => {
             />
           </form>
           <div id="badge">
-          {selectedUsers.map((u)=>{
-            return (<UserBadge
-            key={u._id}
-            user={u}
-            handleFunction={()=>{handleDelete(u)}}/>)
-          })}
+            {selectedUsers.map((u) => {
+              return (
+                <UserBadge
+                  key={u._id}
+                  user={u}
+                  handleFunction={() => {
+                    handleDelete(u);
+                  }}
+                />
+              );
+            })}
           </div>
           {searchResult?.slice(0, 4).map((user) => (
             <UserListItem
