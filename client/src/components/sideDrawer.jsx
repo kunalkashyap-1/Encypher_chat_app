@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
   Badge,
+  CircularProgress,
 } from "@mui/material";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -25,6 +26,7 @@ function SideDrawer(props) {
   const { user, currChat, setCurrChat, chats, setChats, notif, setNotif } =
     ChatState();
   const [isActive, setIsActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
   const [search, setSearch] = useState("");
@@ -61,7 +63,8 @@ function SideDrawer(props) {
     setAnchorEl2(event.currentTarget);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     if (!search) {
       const open = {
         vis: true,
@@ -72,6 +75,7 @@ function SideDrawer(props) {
     }
 
     try {
+      setIsLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -82,6 +86,7 @@ function SideDrawer(props) {
         `https://encypher-backend.onrender.com/api/user?search=${search}`,
         config
       );
+      setIsLoading(false);
       setSearchResult(data);
     } catch (error) {
       const open = {
@@ -89,6 +94,7 @@ function SideDrawer(props) {
         message: "Failed to load the Search Results",
       };
       props.isOpen(open);
+      setIsLoading(false);
     }
   };
 
@@ -134,7 +140,7 @@ function SideDrawer(props) {
           <div id="drawer">
             <h1>Search Users</h1>
             <br />
-            <div id="drawer_search">
+            <form onSubmit={handleSearch} id="drawer_search">
               <TextField
                 id="outlined-basic"
                 label="Search"
@@ -148,15 +154,15 @@ function SideDrawer(props) {
                 }}
                 // sx={{ mt: 2}}
               />
-              <Button
+              {isLoading? <CircularProgress  style={{margin: " 0 1.25rem"}}/> : <Button
                 variant="contained"
                 color="success"
-                size="small"
+                size="medium"
                 onClick={handleSearch}
               >
                 Go
-              </Button>
-            </div>
+              </Button>}
+            </form>
             <Box>
               {searchResult?.map((user) => {
                 return (
