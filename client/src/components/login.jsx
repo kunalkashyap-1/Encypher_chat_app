@@ -74,7 +74,7 @@ function Login(props) {
       };
 
       const { data } = await axios.post(
-       "https://encypher-backend.onrender.com/api/user/login",
+        "https://encypher-backend.onrender.com/api/user/login",
         { email, passwd },
         config
       );
@@ -106,34 +106,40 @@ function Login(props) {
     <div id="back" style={{ backgroundImage: `url(${background})` }}>
       <div className="blur">
         <div className="login-data">
-          <h1>Encypher</h1>
-          <h3>Stay connected, stay safe with Encypher.</h3>
+          <h1 style={{ fontSize: "clamp(40px, 6vw, 80px)" }}>Encypher</h1>
+          <h3
+            style={{
+              fontSize: "clamp(40px, 6vw, 40px)",
+              color: "rgba(255,255,255,0.75",
+            }}
+          >
+            Stay connected, stay safe with Encypher.
+          </h3>
         </div>
         <div className="login">
-          <form onSubmit={(e)=>{
-            e.preventDefault();
-            Submit();
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              Submit();
+            }}
+          >
+            <h1 style={{ fontSize: "3rem", padding: "0 1rem" }}>Login</h1>
             <table>
               <tbody>
-                <tr>
-                  <td>
-                    <h1>Login</h1>
-                  </td>
-                </tr>
                 <tr>
                   <td>
                     <TextField
                       id="outlined-basic"
                       label="Email"
                       variant="filled"
+                      autoComplete="off"
                       InputLabelProps={{ style: { color: "#fff" } }}
                       InputProps={{ style: style, disableUnderline: true }}
                       size="large"
                       onChange={(e) => {
                         setEmail(e.target.value);
                       }}
-                      sx={{ mr: 4, width: 300 }}
+                      sx={{ width: 350 }}
                     />
                   </td>
                 </tr>
@@ -150,7 +156,7 @@ function Login(props) {
                       onChange={(e) => {
                         setPasswd(e.target.value);
                       }}
-                      sx={{ mr: 4, width: 300 }}
+                      sx={{ width: 350 }}
                     />
                   </td>
                 </tr>
@@ -166,7 +172,7 @@ function Login(props) {
                         variant="contained"
                         color="success"
                         type="submit"
-                        sx={{ size: "medium" }}
+                        size="large"
                         onClick={Submit}
                       >
                         Login
@@ -175,7 +181,7 @@ function Login(props) {
                       <Button
                         variant="contained"
                         color="error"
-                        sx={{ size: "medium" }}
+                        size="large"
                         onClick={OAuthHandler}
                       >
                         GMail
