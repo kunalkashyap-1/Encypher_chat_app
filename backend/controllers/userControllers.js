@@ -44,17 +44,21 @@ const authUser = asyncHandler(async(req,res)=>{
 
     const userExists = await User.findOne({email});
 
-    if(userExists && (await userExists.matchPassword(passwd))){
-        res.status(200).json({
-            _id:userExists._id,
-            name:userExists.name,
-            email:userExists.email,
-            image:userExists.image,
-            token:generateToken(userExists._id),
-        });
-    }else{
-        res.status(401);
-        throw new Error("Invalid Email or Password");
+    if(!userExists){
+        res.status(400).json({message:"User does not exist"});
+    }
+    else{
+        const isPasswordValid = await userExists.matchPassword(passwd);
+        if(isPasswordValid){
+            res.status(200).json({
+                _id:userExists._id,
+                name:userExists.name,
+                email:userExists.email,
+                image:userExists.image,
+                token:generateToken(userExists._id),
+            });
+        }
+        res.status(401).json({message: "Invalid password"})
     }
 });
 
