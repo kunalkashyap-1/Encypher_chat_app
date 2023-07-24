@@ -86,12 +86,13 @@ function Login(props) {
         navigate("/chats");
       }
     } catch (error) {
+      console.log(error);
       const open = {
         vis: true,
-        message: error.message,
+        message: error.response.data.message,
       };
       props.isOpen(open);
-      console.log(error.response.data.message);
+      // console.log(error.response.data.message);
       setLoading(false);
     }
   };

@@ -35,10 +35,10 @@ function MyChats(props) {
   };
 
   useEffect(() => {
-      setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
-      fetchChat();
+    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+    fetchChat();
     // eslint-disable-next-line
-    },[props.fetchAgain]);
+  }, [props.fetchAgain]);
 
   return (
     <div id="chat">
@@ -99,9 +99,10 @@ function MyChats(props) {
                         <span>
                           {chat.latestMessage.sender.name}
                           {": "}
-                          {chat.latestMessage.content.length > 30 ? 
-                          chat.latestMessage.content.substring(0,30) + "... ":
-                          chat.latestMessage.content}
+                          {chat.latestMessage.content.length > 30
+                            ? chat.latestMessage.content.substring(0, 30) +
+                              "... "
+                            : chat.latestMessage.content}
                         </span>
                       ) : (
                         <></>
